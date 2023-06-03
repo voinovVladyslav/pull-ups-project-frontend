@@ -1,7 +1,12 @@
 <template>
     <q-header elevated class="bg-primary text-white">
         <q-toolbar>
-            <q-toolbar-title>Workout UA</q-toolbar-title>
+            <q-btn flat to="/">
+                <q-toolbar-title>Workout UA</q-toolbar-title>
+            </q-btn>
+            <q-space></q-space>
+            <q-btn flat to="/registration">Register</q-btn>
+            <q-btn flat to="/login">Login</q-btn>
         </q-toolbar>
     </q-header>
 </template>
