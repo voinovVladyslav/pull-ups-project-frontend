@@ -4,34 +4,39 @@
             <div class="q-pa-md">
                 <q-form
                     @submit.prevent="onSubmit"
+                    @reset="null"
                     class="q-gutter-md form-width"
                 >
                     <q-input
                         v-model="email"
                         label="Your email"
-                        :rules="[(val) => isEmailValid(val) || 'Invalid email']"
+                        :error="!!emailError"
+                        :error-message="emailError"
+                        @blur="validateEmail"
+                        @update:model-value="emailAlreadyExists = false"
                     />
                     <q-input
                         v-model="password1"
                         type="password"
                         label="Your password"
-                        lazy-rules
-                        :rules="[
-                            (val) =>
-                                val.length > 7 ||
-                                'Password should be at least 8 character',
-                        ]"
+                        :error="!!passwordError"
+                        :error-message="passwordError"
+                        @blur="validatePassword"
                     />
                     <q-input
                         v-model="password2"
                         type="password"
                         label="Confirm password"
-                        :rules="[
-                            (val) =>
-                                val === password1 || 'Passwords do not match',
-                        ]"
+                        :error="!!passwordError"
+                        :error-message="passwordError"
+                        @blur="validatePassword"
                     />
-                    <q-btn label="Submit" type="submit" color="primary" />
+                    <q-btn
+                        label="Submit"
+                        type="submit"
+                        color="primary"
+                        :loading="loading"
+                    />
                 </q-form>
             </div>
         </q-card>
@@ -40,6 +45,8 @@
 
 <script>
 import { defineComponent } from "vue";
+import { useAuthStore } from "stores/auth";
+const authStore = useAuthStore();
 
 export default defineComponent({
     name: "RegistrationPage",
@@ -48,19 +55,54 @@ export default defineComponent({
             email: "",
             password1: "",
             password2: "",
+            emailAlreadyExists: false,
+            loading: false,
+            emailError: null,
+            passwordError: null,
         };
     },
     methods: {
-        onSubmit() {
-            console.log("Submit");
-            console.log("email:", this.email);
-            console.log("password1", this.password1);
-            console.log("password2", this.password2);
+        async onSubmit() {
+            self.loading = true;
+            const result = await authStore.registerUser(
+                this.email,
+                this.password1
+            );
+            if (result) {
+                this.$router.push("/login");
+            } else {
+                this.emailAlreadyExists = true;
+                this.emailError = "Email already exists";
+            }
+            self.loading = false;
         },
         isEmailValid(email) {
             const emailPattern =
                 /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
             return emailPattern.test(email);
+        },
+        validateEmail() {
+            if (this.emailAlreadyExists) {
+                this.emailError = "Email already exist";
+                return;
+            }
+            if (!this.isEmailValid(this.email)) {
+                this.emailError = "Invalid email format";
+                return;
+            }
+            this.emailError = null;
+        },
+        validatePassword() {
+            if (this.password1.length < 7) {
+                this.passwordError = "Should be at lead 8 character";
+                return;
+            }
+
+            if (this.password2 !== this.password1) {
+                this.passwordError = "Passwords do not match";
+                return;
+            }
+            this.passwordError = null;
         },
     },
 });
