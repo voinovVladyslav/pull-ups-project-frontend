@@ -54,6 +54,7 @@ export default defineComponent({
             const result = await authStore.loginUser(this.email, this.password);
             this.error = !result;
             if (result) {
+                authStore.getProfileData();
                 this.$router.push("/");
             }
             this.loading = false;
