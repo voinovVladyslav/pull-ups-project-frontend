@@ -37,6 +37,7 @@ export const useAuthStore = defineStore("auth", {
                 .post("/api/user/token/", payload)
                 .then((response) => {
                     this.token = response.data.token;
+                    localStorage.setItem("token", this.token);
                     return true;
                 })
                 .catch((error) => {
@@ -48,8 +49,13 @@ export const useAuthStore = defineStore("auth", {
             this.token = null;
             this.email = null;
             this.username = null;
+            localStorage.removeItem("token");
         },
         async getProfileData() {
+            const storageToken = localStorage.getItem("token");
+            if (!this.isAuthenticated && storageToken) {
+                this.token = storageToken;
+            }
             if (!this.isAuthenticated) {
                 return;
             }
@@ -59,13 +65,11 @@ export const useAuthStore = defineStore("auth", {
             const res = await api
                 .get("/api/user/me/")
                 .then((response) => {
-                    console.log(response.data);
                     this.email = response.data.email;
                     this.username = response.data.username;
                     return true;
                 })
                 .catch((error) => {
-                    console.log(error.response.data);
                     return false;
                 });
             return res;
