@@ -6,6 +6,7 @@ export const useAuthStore = defineStore("auth", {
         token: null,
         email: null,
         username: null,
+        isStaff: false,
     }),
     getters: {
         isAuthenticated() {
@@ -49,6 +50,7 @@ export const useAuthStore = defineStore("auth", {
             this.token = null;
             this.email = null;
             this.username = null;
+            this.isStaff = false;
             localStorage.removeItem("token");
         },
         async getProfileData() {
@@ -67,6 +69,7 @@ export const useAuthStore = defineStore("auth", {
                 .then((response) => {
                     this.email = response.data.email;
                     this.username = response.data.username;
+                    this.isStaff = response.data.is_staff;
                     return true;
                 })
                 .catch((error) => {
