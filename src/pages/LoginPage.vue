@@ -1,34 +1,49 @@
 <template>
     <q-page class="flex flex-center">
         <q-card>
-            <div class="q-pa-md">
-                <q-form
-                    @submit.prevent="onSubmit"
-                    @reset="null"
-                    class="q-gutter-md form-width"
-                >
-                    <q-input
-                        v-model="email"
-                        label="Your email"
-                        lazy-rules
-                        :rules="[(val) => isEmailValid(val) || 'Invalid email']"
-                        :error="error"
-                        error-message="Invalid credentials"
-                    />
-                    <q-input
-                        v-model="password"
-                        type="password"
-                        label="Your password"
-                        :rules="[(val) => !!val || 'Enter password']"
-                    />
-                    <q-btn
-                        label="Submit"
-                        type="submit"
-                        color="primary"
-                        :loading="loading"
-                    />
-                </q-form>
-            </div>
+            <q-card-section>
+                <div class="q-pa-md">
+                    <q-form
+                        @submit.prevent="onSubmit"
+                        @reset="null"
+                        class="q-gutter-md form-width"
+                    >
+                        <q-input
+                            v-model="email"
+                            label="Your email"
+                            lazy-rules
+                            :rules="[
+                                (val) => isEmailValid(val) || 'Invalid email',
+                            ]"
+                            :error="error"
+                            :error-message="
+                                error ? 'Invalid credentials' : null
+                            "
+                        />
+                        <q-input
+                            v-model="password"
+                            type="password"
+                            label="Your password"
+                            :rules="[(val) => !!val || 'Enter password']"
+                        />
+                        <div>
+                            <q-btn
+                                class="full-width"
+                                label="Submit"
+                                type="submit"
+                                color="primary"
+                                :loading="loading"
+                            />
+                        </div>
+                    </q-form>
+                </div>
+            </q-card-section>
+            <q-card-section class="text-center q-pa-none">
+                <p class="text-grey-6">
+                    Don't have an account?
+                    <q-btn unelevated flat to="/registration">Register</q-btn>
+                </p>
+            </q-card-section>
         </q-card>
     </q-page>
 </template>
@@ -71,7 +86,7 @@ export default defineComponent({
 
 <style scoped>
 .form-width {
-    min-width: 300px;
-    max-width: 400px;
+    min-width: 400px;
+    max-width: 500px;
 }
 </style>

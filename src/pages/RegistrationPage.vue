@@ -1,44 +1,55 @@
 <template>
     <q-page class="flex flex-center">
         <q-card>
-            <div class="q-pa-md">
-                <q-form
-                    @submit.prevent="onSubmit"
-                    @reset="null"
-                    class="q-gutter-md form-width"
-                >
-                    <q-input
-                        v-model="email"
-                        label="Your email"
-                        :error="!!emailError"
-                        :error-message="emailError"
-                        @blur="validateEmail"
-                        @update:model-value="emailAlreadyExists = false"
-                    />
-                    <q-input
-                        v-model="password1"
-                        type="password"
-                        label="Your password"
-                        :error="!!passwordError"
-                        :error-message="passwordError"
-                        @blur="validatePassword"
-                    />
-                    <q-input
-                        v-model="password2"
-                        type="password"
-                        label="Confirm password"
-                        :error="!!passwordError"
-                        :error-message="passwordError"
-                        @blur="validatePassword"
-                    />
-                    <q-btn
-                        label="Submit"
-                        type="submit"
-                        color="primary"
-                        :loading="loading"
-                    />
-                </q-form>
-            </div>
+            <q-card-section class="q-pa-md">
+                <div class="q-pa-md">
+                    <q-form
+                        @submit.prevent="onSubmit"
+                        @reset="null"
+                        class="q-gutter-md form-width"
+                    >
+                        <q-input
+                            v-model="email"
+                            label="Your email"
+                            :error="!!emailError"
+                            :error-message="emailError"
+                            @blur="validateEmail"
+                            @update:model-value="emailAlreadyExists = false"
+                        />
+                        <q-input
+                            v-model="password1"
+                            type="password"
+                            label="Your password"
+                            :error="!!passwordError"
+                            :error-message="passwordError"
+                            @blur="validatePassword"
+                        />
+                        <q-input
+                            v-model="password2"
+                            type="password"
+                            label="Confirm password"
+                            :error="!!passwordError"
+                            :error-message="passwordError"
+                            @blur="validatePassword"
+                        />
+                        <div>
+                            <q-btn
+                                class="full-width"
+                                label="Submit"
+                                type="submit"
+                                color="primary"
+                                :loading="loading"
+                            />
+                        </div>
+                    </q-form>
+                </div>
+            </q-card-section>
+            <q-card-section class="text-center q-pa-none">
+                <p class="text-grey-6">
+                    Already have account?
+                    <q-btn unelevated flat to="/login">Login</q-btn>
+                </p>
+            </q-card-section>
         </q-card>
     </q-page>
 </template>
@@ -110,7 +121,7 @@ export default defineComponent({
 
 <style scoped>
 .form-width {
-    min-width: 300px;
-    max-width: 400px;
+    min-width: 400px;
+    max-width: 500px;
 }
 </style>
