@@ -51,6 +51,7 @@ export const useAuthStore = defineStore("auth", {
             this.email = null;
             this.username = null;
             this.isStaff = false;
+            api.defaults.headers.common.Authorization = null;
             localStorage.removeItem("token");
         },
         async getProfileData() {
