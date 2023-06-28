@@ -29,7 +29,7 @@
                         <div>
                             <q-btn
                                 class="full-width"
-                                label="Submit"
+                                label="Login"
                                 type="submit"
                                 color="primary"
                                 :loading="loading"

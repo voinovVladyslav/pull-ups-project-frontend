@@ -19,6 +19,7 @@
                                     )
                                 )
                             }}
+                            km
                         </div>
                         <div v-else>Calculating...</div>
                     </q-td>
@@ -54,7 +55,6 @@ export default defineComponent({
         };
     },
     setup() {
-        authStore.getProfileData();
         barsStore.getBars();
         geolocationStore.getLocation();
     },

@@ -78,5 +78,21 @@ export const useAuthStore = defineStore("auth", {
                 });
             return res;
         },
+        async updateProfileData(payload) {
+            if (!this.isAuthenticated) {
+                return;
+            }
+            const res = await api
+                .patch("/api/user/me/", payload)
+                .then((response) => {
+                    this.email = response.data.email;
+                    this.username = response.data.username;
+                    return true;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return res;
+        },
     },
 });
