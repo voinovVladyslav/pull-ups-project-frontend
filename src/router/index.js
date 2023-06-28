@@ -36,6 +36,7 @@ export default route(function (/* { store, ssrContext } */) {
     });
 
     Router.beforeEach((to, from, next) => {
+        authStore.getProfileData();
         if (to.meta.unauthenticatedOnly && authStore.isAuthenticated) {
             return next("/");
         } else if (to.meta.unauthenticatedOnly && !authStore.isAuthenticated) {

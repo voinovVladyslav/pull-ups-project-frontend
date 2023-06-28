@@ -30,6 +30,15 @@ const routes = [
                     unauthenticatedOnly: true,
                 },
             },
+            {
+                path: "/profile",
+                component: () => import("pages/UserProfile.vue"),
+                meta: {
+                    authOnly: true,
+                    adminOnly: false,
+                    unauthenticatedOnly: false,
+                },
+            },
         ],
         meta: {
             authOnly: false,

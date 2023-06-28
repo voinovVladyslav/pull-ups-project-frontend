@@ -15,7 +15,7 @@
             <div v-else>
                 <q-btn-dropdown flat :label="displayName">
                     <q-list>
-                        <q-item clickable v-close-popup>
+                        <q-item clickable v-close-popup to="/profile">
                             <q-item-section>
                                 <q-item-label>Profile</q-item-label>
                             </q-item-section>
@@ -53,6 +53,7 @@ export default defineComponent({
     methods: {
         logout() {
             authStore.logout();
+            this.$router.push("/");
         },
     },
 });
