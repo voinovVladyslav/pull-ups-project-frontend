@@ -6,14 +6,21 @@ export const useBarsStore = defineStore("bars", {
         bars: [],
         totalBars: 0,
         pageSize: 20,
-        pageNumber: 1,
         perPageVariants: [20, 50, 100],
+        pageNumber: 1,
+        referencePoint: null,
         next: null,
         prev: null,
     }),
     getters: {
         queryString() {
-            return `?page=${this.pageNumber}&page_size=${this.pageSize}`;
+            let qs = `?page=${this.pageNumber}&page_size=${this.pageSize}`;
+            if (this.referencePoint) {
+                qs =
+                    qs +
+                    `&ref_point=${this.referencePoint.longitude};${this.referencePoint.latitude}`;
+            }
+            return qs;
         },
         totalPages() {
             return Math.ceil(this.totalBars / this.pageSize);

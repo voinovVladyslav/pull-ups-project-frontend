@@ -26,6 +26,13 @@
                         <div v-else>Calculating...</div>
                     </q-td>
                 </template>
+                <template v-slot:top-right>
+                    <q-checkbox
+                        label="Show closest"
+                        v-model="showClosest"
+                        :disable="!location"
+                    ></q-checkbox>
+                </template>
                 <template v-slot:pagination>
                     <q-pagination
                         v-model="currentPage"
@@ -53,6 +60,7 @@ export default defineComponent({
     data() {
         return {
             currentPage: barsStore.pageNumber,
+            showClosest: false,
             pullUpBarsColumns: [
                 { name: "id", label: "Pull Up Bar ID", field: "id" },
                 { name: "name", label: "Name", field: "title" },
@@ -96,6 +104,27 @@ export default defineComponent({
             barsStore.pageNumber = newValue;
             barsStore.getBars();
         },
+        showClosest(newValue) {
+            if (!this.location) {
+                this.showClosest = false;
+                return;
+            }
+            if (newValue) {
+                const refPoint = {
+                    longitude: this.location.longitude,
+                    latitude: this.location.latitude,
+                };
+                barsStore.referencePoint = refPoint;
+                barsStore.pageNumber = 1;
+                this.currentPage = 1;
+                barsStore.getBars();
+            } else {
+                barsStore.referencePoint = null;
+                barsStore.pageNumber = 1;
+                this.currentPage = 1;
+                barsStore.getBars();
+            }
+        },
     },
     methods: {
         updatePagination(newPagination) {
@@ -107,8 +136,8 @@ export default defineComponent({
         distanceToBar(currentLocation, barCoords) {
             const lat1 = currentLocation.latitude;
             const lon1 = currentLocation.longitude;
-            const lat2 = barCoords[0];
-            const lon2 = barCoords[1];
+            const lat2 = barCoords[1];
+            const lon2 = barCoords[0];
 
             if (lat1 == lat2 && lon1 == lon2) {
                 return 0;
