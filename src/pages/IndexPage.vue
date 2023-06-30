@@ -7,6 +7,8 @@
                 title="Pull Up Bars"
                 :rows="bars"
                 :columns="pullUpBarsColumns"
+                :pagination="pagination"
+                :rows-per-page-options="[]"
             >
                 <template v-slot:body-cell-distance="props">
                     <q-td>
@@ -24,6 +26,15 @@
                         <div v-else>Calculating...</div>
                     </q-td>
                 </template>
+                <template v-slot:pagination>
+                    <q-pagination
+                        v-model="currentPage"
+                        boundary-links
+                        direction-links
+                        :max="totalPages"
+                        :max-pages="6"
+                    />
+                </template>
             </q-table>
         </div>
     </q-page>
@@ -31,11 +42,9 @@
 
 <script>
 import { defineComponent } from "vue";
-import { useAuthStore } from "src/stores/auth";
 import { useBarsStore } from "src/stores/bars";
 import { useGeolocationStore } from "src/stores/geolocation";
 
-const authStore = useAuthStore();
 const barsStore = useBarsStore();
 const geolocationStore = useGeolocationStore();
 
@@ -43,6 +52,7 @@ export default defineComponent({
     name: "IndexPage",
     data() {
         return {
+            currentPage: barsStore.pageNumber,
             pullUpBarsColumns: [
                 { name: "id", label: "Pull Up Bar ID", field: "id" },
                 { name: "name", label: "Name", field: "title" },
@@ -60,14 +70,40 @@ export default defineComponent({
     },
     computed: {
         bars() {
-            console.log(barsStore.bars);
             return barsStore.bars;
         },
         location() {
             return geolocationStore.location;
         },
+        pageNumber() {
+            return barsStore.pageNumber;
+        },
+        pageSize() {
+            return barsStore.pageSize;
+        },
+        totalPages() {
+            return barsStore.totalPages;
+        },
+        pagination() {
+            return {
+                page: this.pageNumber,
+                rowsPerPage: this.pageSize,
+            };
+        },
+    },
+    watch: {
+        currentPage(newValue) {
+            barsStore.pageNumber = newValue;
+            barsStore.getBars();
+        },
     },
     methods: {
+        updatePagination(newPagination) {
+            barsStore.pageSize = newPagination.rowsPerPage;
+            barsStore.pageNumber = 1;
+            this.currentPage = 1;
+            barsStore.getBars();
+        },
         distanceToBar(currentLocation, barCoords) {
             const lat1 = currentLocation.latitude;
             const lon1 = currentLocation.longitude;
