@@ -26,6 +26,23 @@
                         <div v-else>Calculating...</div>
                     </q-td>
                 </template>
+                <template v-slot:body-cell-route="props">
+                    <td>
+                        <div v-if="location">
+                            <a
+                                target="_blank"
+                                :href="
+                                    createLinkToGoogleMaps(
+                                        props.row.location.coordinates
+                                    )
+                                "
+                            >
+                                <q-btn label="View on map"> </q-btn>
+                            </a>
+                        </div>
+                        <div v-else>Calculating...</div>
+                    </td>
+                </template>
                 <template v-slot:top-right>
                     <q-checkbox
                         label="Show closest"
@@ -67,6 +84,11 @@ export default defineComponent({
                 {
                     name: "distance",
                     label: "Distance from your location",
+                    field: "location",
+                },
+                {
+                    name: "route",
+                    label: "Route on map",
                     field: "location",
                 },
             ],
@@ -161,6 +183,15 @@ export default defineComponent({
         },
         roundToTwoDigits(number) {
             return Math.round((number + Number.EPSILON) * 100) / 100;
+        },
+        createLinkToGoogleMaps(destinationPoint) {
+            if (!this.location) {
+                return;
+            }
+            const toPoint = `${destinationPoint[1]},${destinationPoint[0]}`;
+            const fromPoint = `${this.location.latitude},${this.location.longitude}`;
+            const url = `https://www.google.com/maps/dir/${fromPoint}/${toPoint}`;
+            return url;
         },
     },
 });
