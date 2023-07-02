@@ -22,6 +22,14 @@
                     ></q-btn>
                 </q-form>
             </div>
+
+            <q-btn
+                label="Logout"
+                color="negative"
+                type="button"
+                @click="logout"
+            >
+            </q-btn>
         </div>
     </q-page>
 </template>
@@ -63,6 +71,10 @@ export default defineComponent({
             this.editForm = !this.editForm;
             this.editEmail = this.email;
             this.editUsername = this.username;
+        },
+        logout() {
+            authStore.logout();
+            this.$router.push("/");
         },
     },
 });
