@@ -14,6 +14,12 @@
                     <q-input label="Email" v-model="editEmail"></q-input>
                     <q-input label="Username" v-model="editUsername"> </q-input>
                     <q-btn label="Save" color="primary" type="submit"></q-btn>
+                    <q-btn
+                        label="Cancel"
+                        color="grey"
+                        type="button"
+                        @click="editForm = !editForm"
+                    ></q-btn>
                 </q-form>
             </div>
         </div>

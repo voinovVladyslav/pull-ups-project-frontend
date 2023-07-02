@@ -86,7 +86,7 @@ export default defineComponent({
 
 <style scoped>
 .form-width {
-    min-width: 400px;
+    min-width: 300px;
     max-width: 500px;
 }
 </style>
