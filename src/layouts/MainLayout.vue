@@ -11,12 +11,7 @@
         >
             <q-scroll-area class="fit">
                 <q-list>
-                    <q-item
-                        clickable
-                        :active="'/' === currentLocation"
-                        v-ripple
-                        to="/"
-                    >
+                    <q-item :active="false" clickable v-ripple to="/">
                         <q-item-section avatar>
                             <q-icon name="home"></q-icon>
                         </q-item-section>
@@ -26,7 +21,7 @@
                     <q-item
                         v-if="isAuthenticated"
                         clickable
-                        :active="'/profile' === currentLocation"
+                        :active="false"
                         v-ripple
                         to="/profile"
                     >
@@ -39,7 +34,7 @@
                     <q-item
                         v-if="isAdmin"
                         clickable
-                        :active="'/add-pull-up-bar' === currentLocation"
+                        :active="false"
                         v-ripple
                         to="/add-pull-up-bar"
                     >
@@ -88,10 +83,6 @@ export default {
         },
         isAuthenticated() {
             return authStore.isAuthenticated;
-        },
-        currentLocation() {
-            console.log(window.location.pathname);
-            return window.location.pathname;
         },
     },
 };
