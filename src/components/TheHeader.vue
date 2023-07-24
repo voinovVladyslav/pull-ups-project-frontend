@@ -8,7 +8,6 @@
                 icon="menu"
                 @click="$emit('toggleLeftDrawer')"
             />
-            <q-toolbar-title>Workout UA</q-toolbar-title>
             <q-space></q-space>
             <div class="flex">
                 <div v-if="!isAuthenticated">
@@ -34,13 +33,10 @@ export default defineComponent({
     emits: ["toggleLeftDrawer"],
     computed: {
         displayName() {
-            return authStore.username || authStore.email;
+            return authStore.email;
         },
         isAuthenticated() {
             return authStore.isAuthenticated;
-        },
-        isStaff() {
-            return authStore.isStaff;
         },
     },
     methods: {},

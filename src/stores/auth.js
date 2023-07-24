@@ -5,7 +5,6 @@ export const useAuthStore = defineStore("auth", {
     state: () => ({
         token: null,
         email: null,
-        username: null,
         isStaff: false,
     }),
     getters: {
@@ -49,7 +48,6 @@ export const useAuthStore = defineStore("auth", {
         async logout() {
             this.token = null;
             this.email = null;
-            this.username = null;
             this.isStaff = false;
             api.defaults.headers.common.Authorization = null;
             localStorage.removeItem("token");
@@ -69,7 +67,6 @@ export const useAuthStore = defineStore("auth", {
                 .get("/api/user/me/")
                 .then((response) => {
                     this.email = response.data.email;
-                    this.username = response.data.username;
                     this.isStaff = response.data.is_staff;
                     return true;
                 })
@@ -86,7 +83,6 @@ export const useAuthStore = defineStore("auth", {
                 .patch("/api/user/me/", payload)
                 .then((response) => {
                     this.email = response.data.email;
-                    this.username = response.data.username;
                     return true;
                 })
                 .catch((error) => {
