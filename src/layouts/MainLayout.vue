@@ -13,9 +13,9 @@
                 <q-list>
                     <q-item :active="false" clickable v-ripple to="/">
                         <q-item-section avatar>
-                            <q-icon name="home"></q-icon>
+                            <q-icon name="search"></q-icon>
                         </q-item-section>
-                        <q-item-section> Home </q-item-section>
+                        <q-item-section> Discover </q-item-section>
                     </q-item>
                     <q-separator></q-separator>
                     <q-item
@@ -29,6 +29,19 @@
                             <q-icon name="person"></q-icon>
                         </q-item-section>
                         <q-item-section> Profile </q-item-section>
+                    </q-item>
+                    <q-separator></q-separator>
+                    <q-item
+                        v-if="isAuthenticated"
+                        clickable
+                        :active="false"
+                        v-ripple
+                        to="/favorites"
+                    >
+                        <q-item-section avatar>
+                            <q-icon name="star"></q-icon>
+                        </q-item-section>
+                        <q-item-section> Favorites </q-item-section>
                     </q-item>
                     <q-separator></q-separator>
                     <q-item
