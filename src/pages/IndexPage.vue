@@ -26,6 +26,14 @@
                         <div v-else>Calculating...</div>
                     </q-td>
                 </template>
+                <template v-slot:body-cell-favorite="props">
+                    <td>
+                        <q-btn
+                            label="Add to favorite"
+                            @click="addToFavorite(props.row.id)"
+                        ></q-btn>
+                    </td>
+                </template>
                 <template v-slot:body-cell-route="props">
                     <td>
                         <div v-if="location">
@@ -83,8 +91,13 @@ export default defineComponent({
                 { name: "name", label: "Name", field: "title" },
                 {
                     name: "distance",
-                    label: "Distance from your location",
+                    label: "Distance from you",
                     field: "location",
+                },
+                {
+                    name: "favorite",
+                    label: "Favorite",
+                    field: "favorite",
                 },
                 {
                     name: "route",
@@ -149,6 +162,12 @@ export default defineComponent({
         },
     },
     methods: {
+        async addToFavorite(id) {
+            await barsStore.addToFavorite(id);
+            this.currentPage = 1;
+            barsStore.pageNumber = 1;
+            await barsStore.getBars();
+        },
         updatePagination(newPagination) {
             barsStore.pageSize = newPagination.rowsPerPage;
             barsStore.pageNumber = 1;

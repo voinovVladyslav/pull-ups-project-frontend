@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
+import { Notify } from "quasar";
 
 export const useBarsStore = defineStore("bars", {
     state: () => ({
@@ -40,6 +41,25 @@ export const useBarsStore = defineStore("bars", {
                 })
                 .catch((error) => {
                     return false;
+                });
+            return res;
+        },
+        async addToFavorite(id) {
+            const payload = { bar_id_: id };
+            const url = "/api/bars/favorites/add/";
+            const res = await api
+                .post(url, payload)
+                .then((response) => {
+                    Notify.create({
+                        message: "Added to favorite",
+                        color: "positive",
+                    });
+                })
+                .catch((error) => {
+                    Notify.create({
+                        message: "Error on adding to favorite",
+                        color: "negative",
+                    });
                 });
             return res;
         },

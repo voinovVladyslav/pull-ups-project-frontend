@@ -11,9 +11,6 @@
             <q-toolbar-title>Workout UA</q-toolbar-title>
             <q-space></q-space>
             <div class="flex">
-                <div v-if="isStaff" class="q-mr-md">
-                    <q-toolbar-title>Administrator</q-toolbar-title>
-                </div>
                 <div v-if="!isAuthenticated">
                     <q-btn flat to="/registration">Register</q-btn>
                     <q-btn flat to="/login">Login</q-btn>
