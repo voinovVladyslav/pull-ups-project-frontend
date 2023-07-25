@@ -1,47 +1,54 @@
 <template>
     <q-page class="flex flex-center">
-        <div class="q-pa-md">
-            <q-table
-                flat
-                bordered
-                title="Pull Up Bars"
-                :rows="bars"
-                :columns="pullUpBarsColumns"
-                :pagination="pagination"
-                :rows-per-page-options="[]"
-            >
-                <template v-slot:body-cell-distance="props">
-                    <q-td>
+        <div class="q-pa-md row">
+            <q-checkbox
+                label="Show closest"
+                v-model="showClosest"
+                :disable="!location"
+            ></q-checkbox>
+            <q-list>
+                <q-item>
+                    <q-item-section>ID</q-item-section>
+                    <q-item-section>Distance</q-item-section>
+                    <q-item-section>Start workout</q-item-section>
+                    <q-item-section>Add to favorite</q-item-section>
+                    <q-item-section>Show on map</q-item-section>
+                </q-item>
+                <q-item v-for="bar in bars" :key="bar.id">
+                    <q-item-section>{{ bar.id }}</q-item-section>
+                    <q-item-section>
                         <div v-if="location">
                             {{
                                 roundToTwoDigits(
                                     distanceToBar(
                                         location,
-                                        props.row.location.coordinates
+                                        bar.location.coordinates
                                     )
                                 )
                             }}
                             km
                         </div>
                         <div v-else>Calculating...</div>
-                    </q-td>
-                </template>
-                <template v-slot:body-cell-favorite="props">
-                    <td>
+                    </q-item-section>
+                    <q-item-section
+                        ><q-btn
+                            label="Start workout"
+                            :disable="!isAuthenticated"
+                        ></q-btn
+                    ></q-item-section>
+                    <q-item-section>
                         <q-btn
                             label="Add to favorite"
-                            @click="addToFavorite(props.row.id)"
+                            @click="addToFavorite(bar.id)"
                         ></q-btn>
-                    </td>
-                </template>
-                <template v-slot:body-cell-route="props">
-                    <td>
+                    </q-item-section>
+                    <q-item-section>
                         <div v-if="location">
                             <a
                                 target="_blank"
                                 :href="
                                     createLinkToGoogleMaps(
-                                        props.row.location.coordinates
+                                        bar.location.coordinates
                                     )
                                 "
                             >
@@ -49,25 +56,16 @@
                             </a>
                         </div>
                         <div v-else>Calculating...</div>
-                    </td>
-                </template>
-                <template v-slot:top-right>
-                    <q-checkbox
-                        label="Show closest"
-                        v-model="showClosest"
-                        :disable="!location"
-                    ></q-checkbox>
-                </template>
-                <template v-slot:pagination>
-                    <q-pagination
-                        v-model="currentPage"
-                        boundary-links
-                        direction-links
-                        :max="totalPages"
-                        :max-pages="6"
-                    />
-                </template>
-            </q-table>
+                    </q-item-section>
+                </q-item>
+            </q-list>
+            <q-pagination
+                v-model="currentPage"
+                boundary-links
+                direction-links
+                :max="totalPages"
+                :max-pages="6"
+            />
         </div>
     </q-page>
 </template>
@@ -76,9 +74,11 @@
 import { defineComponent } from "vue";
 import { useBarsStore } from "src/stores/bars";
 import { useGeolocationStore } from "src/stores/geolocation";
+import { useAuthStore } from "src/stores/auth";
 
 const barsStore = useBarsStore();
 const geolocationStore = useGeolocationStore();
+const authStore = useAuthStore();
 
 export default defineComponent({
     name: "IndexPage",
@@ -132,6 +132,9 @@ export default defineComponent({
                 page: this.pageNumber,
                 rowsPerPage: this.pageSize,
             };
+        },
+        isAuthenticated() {
+            return authStore.isAuthenticated;
         },
     },
     watch: {
