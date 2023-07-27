@@ -6,7 +6,7 @@ export const useBarsStore = defineStore("bars", {
     state: () => ({
         bars: [],
         totalBars: 0,
-        pageSize: 10,
+        pageSize: 16,
         perPageVariants: [20, 50, 100],
         pageNumber: 1,
         referencePoint: null,
@@ -45,7 +45,7 @@ export const useBarsStore = defineStore("bars", {
             return res;
         },
         async addToFavorite(id) {
-            const payload = { bar_id_: id };
+            const payload = { bar_id: id };
             const url = "/api/bars/favorites/add/";
             const res = await api
                 .post(url, payload)
