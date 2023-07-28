@@ -6,7 +6,7 @@ export const useBarsStore = defineStore("bars", {
     state: () => ({
         bars: [],
         totalBars: 0,
-        pageSize: 16,
+        pageSize: 15,
         perPageVariants: [20, 50, 100],
         pageNumber: 1,
         referencePoint: null,

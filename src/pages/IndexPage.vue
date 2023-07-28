@@ -8,44 +8,30 @@
                         @click="showClosest = true"
                         :color="showClosest ? 'primary' : 'white'"
                         :text-color="showClosest ? 'white' : 'black'"
+                        :disable="!location"
                     ></q-btn>
                     <q-btn
                         label="Newest first"
-                        :disable="!location"
                         :color="!showClosest ? 'primary' : 'white'"
                         :text-color="!showClosest ? 'white' : 'black'"
                         @click="showClosest = false"
                     ></q-btn>
                 </q-btn-group>
             </div>
-            <div class="col-12">
+            <div class="col-12 q-mt-md">
                 <q-list>
-                    <q-item class="row justify-center">
-                        <q-item-section class="col-1 text-center"
-                            >ID</q-item-section
-                        >
-                        <q-item-section class="col-2 text-center"
-                            >Distance</q-item-section
-                        >
-                        <q-item-section class="col-3 text-center"
-                            >Start workout</q-item-section
-                        >
-                        <q-item-section class="col-3 text-center"
-                            >Add to favorite</q-item-section
-                        >
-                        <q-item-section class="col-3 text-center"
-                            >Show on map</q-item-section
-                        >
-                    </q-item>
                     <q-item
                         v-for="bar in bars"
                         :key="bar.id"
                         class="row justify-center"
                     >
-                        <q-item-section class="col-1 text-center">{{
-                            bar.id
-                        }}</q-item-section>
-                        <q-item-section class="col-2 text-center">
+                        <q-item-section class="col-3 text-center">
+                            {{ bar.id }}
+                        </q-item-section>
+                        <q-item-section class="col-3 text-center">
+                            {{ bar.title }}
+                        </q-item-section>
+                        <q-item-section class="col-3 text-center">
                             <div v-if="location">
                                 {{
                                     roundToTwoDigits(
@@ -59,38 +45,67 @@
                             </div>
                             <div v-else>Calculating...</div>
                         </q-item-section>
-                        <q-item-section class="col-3 text-center"
-                            ><q-btn
-                                label="Start workout"
-                                :disable="!isAuthenticated"
-                            ></q-btn
-                        ></q-item-section>
-                        <q-item-section class="col-3 text-center">
-                            <q-btn
-                                label="Add to favorite"
-                                @click="addToFavorite(bar.id)"
-                                :disable="!isAuthenticated"
-                            ></q-btn>
-                        </q-item-section>
-                        <q-item-section class="col-3 text-center">
-                            <div v-if="location">
-                                <a
-                                    target="_blank"
-                                    :href="
-                                        createLinkToGoogleMaps(
-                                            bar.location.coordinates
-                                        )
-                                    "
-                                >
-                                    <q-btn label="View on map"> </q-btn>
-                                </a>
-                            </div>
-                            <div v-else>Calculating...</div>
+                        <q-item-section class="col-3">
+                            <q-icon
+                                name="more_vert"
+                                clickable
+                                size="sm"
+                                style="margin-left: auto; margin-right: auto"
+                            >
+                                <q-menu auto-close>
+                                    <q-list style="max-width: max-content">
+                                        <q-item
+                                            clickable
+                                            v-close-popup
+                                            :disable="!isAuthenticated"
+                                        >
+                                            <q-item-section>
+                                                Start Workout
+                                            </q-item-section>
+                                        </q-item>
+                                        <q-item
+                                            clickable
+                                            v-close-popup
+                                            @click="addToFavorite(bar.id)"
+                                            :disable="!isAuthenticated"
+                                        >
+                                            <q-item-section>
+                                                Add to Favorite
+                                            </q-item-section>
+                                        </q-item>
+                                        <q-item clickable v-close-popup>
+                                            <q-item-section
+                                                v-if="location"
+                                                color="black"
+                                            >
+                                                <a
+                                                    style="
+                                                        text-decoration: none;
+                                                        color: black;
+                                                    "
+                                                    target="_blank"
+                                                    :href="
+                                                        createLinkToGoogleMaps(
+                                                            bar.location
+                                                                .coordinates
+                                                        )
+                                                    "
+                                                >
+                                                    View on Map
+                                                </a>
+                                            </q-item-section>
+                                            <q-item-section v-else>
+                                                Calculating...
+                                            </q-item-section>
+                                        </q-item>
+                                    </q-list>
+                                </q-menu>
+                            </q-icon>
                         </q-item-section>
                     </q-item>
                 </q-list>
             </div>
-            <div class="col-12">
+            <div class="col-12 row justify-center q-mt-md">
                 <q-pagination
                     v-model="currentPage"
                     boundary-links
