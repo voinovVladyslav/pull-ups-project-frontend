@@ -1,5 +1,5 @@
 <template>
-    <q-page class="flex flex-center">
+    <q-page class="">
         <div class="q-pa-md row">
             <div class="col-12 row justify-center">
                 <q-btn-group spread class="col-10">
@@ -52,8 +52,8 @@
                                 size="sm"
                                 style="margin-left: auto; margin-right: auto"
                             >
-                                <q-menu auto-close>
-                                    <q-list style="max-width: max-content">
+                                <q-menu auto-close fit style="min-width: 150px">
+                                    <q-list>
                                         <q-item
                                             clickable
                                             v-close-popup
