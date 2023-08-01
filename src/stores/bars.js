@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
 import { Notify } from "quasar";
+import { useRouter } from "vue-router";
 
 export const useBarsStore = defineStore("bars", {
     state: () => ({
         bars: [],
+        bar: null,
         totalBars: 0,
         pageSize: 15,
         perPageVariants: [20, 50, 100],
@@ -43,6 +45,18 @@ export const useBarsStore = defineStore("bars", {
                     return false;
                 });
             return res;
+        },
+        async getBardById(id) {
+            const router = useRouter();
+            const url = `/api/bars/${id}/`;
+            const res = await api
+                .get(url)
+                .then((response) => {
+                    this.bar = response.data;
+                })
+                .catch((error) => {
+                    router.push("/");
+                });
         },
         async getFavoriteBars() {
             const url = "/api/bars/favorites/" + this.queryString;

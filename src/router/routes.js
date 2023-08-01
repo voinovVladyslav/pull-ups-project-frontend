@@ -48,6 +48,15 @@ const routes = [
                     unauthenticatedOnly: false,
                 },
             },
+            {
+                path: "/workout/:id/",
+                component: () => import("pages/WorkoutPage.vue"),
+                meta: {
+                    authOnly: true,
+                    adminOnly: false,
+                    unauthenticatedOnly: false,
+                },
+            },
         ],
         meta: {
             authOnly: false,

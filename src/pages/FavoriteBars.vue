@@ -53,7 +53,7 @@
                                             :disable="!isAuthenticated"
                                         >
                                             <q-item-section>
-                                                Add to Favorite
+                                                Remove from Favorite
                                             </q-item-section>
                                         </q-item>
                                         <q-item clickable v-close-popup>
