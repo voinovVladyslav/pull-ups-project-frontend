@@ -44,6 +44,19 @@ export const useBarsStore = defineStore("bars", {
                 });
             return res;
         },
+        async getFavoriteBars() {
+            const url = "/api/bars/favorites/" + this.queryString;
+            const res = await api
+                .get(url)
+                .then((response) => {
+                    this.bars = response.data;
+                    return true;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return res;
+        },
         async addToFavorite(id) {
             const payload = { bar_id: id };
             const url = "/api/bars/favorites/add/";
@@ -58,6 +71,25 @@ export const useBarsStore = defineStore("bars", {
                 .catch((error) => {
                     Notify.create({
                         message: "Error on adding to favorite",
+                        color: "negative",
+                    });
+                });
+            return res;
+        },
+        async removeFromFavorite(id) {
+            const payload = { bar_id: id };
+            const url = "/api/bars/favorites/remove/";
+            const res = await api
+                .post(url, payload)
+                .then((response) => {
+                    Notify.create({
+                        message: "Removed from favorite",
+                        color: "positive",
+                    });
+                })
+                .catch((error) => {
+                    Notify.create({
+                        message: "Error on removing from favorite",
                         color: "negative",
                     });
                 });

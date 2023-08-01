@@ -39,6 +39,15 @@ const routes = [
                     unauthenticatedOnly: false,
                 },
             },
+            {
+                path: "/favorites",
+                component: () => import("pages/FavoriteBars.vue"),
+                meta: {
+                    authOnly: true,
+                    adminOnly: false,
+                    unauthenticatedOnly: false,
+                },
+            },
         ],
         meta: {
             authOnly: false,
