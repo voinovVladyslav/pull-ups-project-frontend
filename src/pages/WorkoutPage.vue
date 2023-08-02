@@ -1,6 +1,7 @@
 <template>
     <q-page>
         <div>You on bar #{{ barId }}</div>
+        <div>{{ bar }}</div>
     </q-page>
 </template>
 <script>

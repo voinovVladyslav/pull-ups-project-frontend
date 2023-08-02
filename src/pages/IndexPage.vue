@@ -58,6 +58,7 @@
                                             clickable
                                             v-close-popup
                                             :disable="!isAuthenticated"
+                                            @click="goToWorkout(bar.id)"
                                         >
                                             <q-item-section>
                                                 Start Workout
@@ -220,6 +221,9 @@ export default defineComponent({
         },
         createLinkToGoogleMaps(destinationPoint, location) {
             return createLinkToGoogleMaps(destinationPoint, location);
+        },
+        goToWorkout(id) {
+            return this.$router.push(`/workout/${id}/`);
         },
     },
 });

@@ -11,6 +11,20 @@
         >
             <q-scroll-area class="fit">
                 <q-list>
+                    <div v-if="isAuthenticated">
+                        <q-item
+                            clickable
+                            :active="false"
+                            v-ripple
+                            to="/profile"
+                        >
+                            <q-item-section avatar>
+                                <q-icon name="person"></q-icon>
+                            </q-item-section>
+                            <q-item-section> Profile </q-item-section>
+                        </q-item>
+                        <q-separator></q-separator>
+                    </div>
                     <div>
                         <q-item :active="false" clickable v-ripple to="/">
                             <q-item-section avatar>
@@ -40,20 +54,6 @@
                                 <q-icon name="login"></q-icon>
                             </q-item-section>
                             <q-item-section> Login </q-item-section>
-                        </q-item>
-                        <q-separator></q-separator>
-                    </div>
-                    <div v-if="isAuthenticated">
-                        <q-item
-                            clickable
-                            :active="false"
-                            v-ripple
-                            to="/profile"
-                        >
-                            <q-item-section avatar>
-                                <q-icon name="person"></q-icon>
-                            </q-item-section>
-                            <q-item-section> Profile </q-item-section>
                         </q-item>
                         <q-separator></q-separator>
                     </div>
