@@ -38,5 +38,29 @@ export const useCounterStore = defineStore("counter", {
                 });
             return response;
         },
+        async addCounter(payload) {
+            const response = api
+                .post(this.baseURL, payload)
+                .then((response) => {
+                    return true;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return false;
+                });
+            return response;
+        },
+        async deleteCounter(id) {
+            const url = this.baseURL + `${id}/`;
+            const response = api
+                .delete(url)
+                .then((response) => {
+                    return true;
+                })
+                .catch((error) => {
+                    return false;
+                });
+            return response;
+        },
     },
 });
