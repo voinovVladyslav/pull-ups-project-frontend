@@ -74,6 +74,16 @@
                 </q-list>
             </div>
         </div>
+        <div class="col-12 row justify-center q-my-md" v-if="counters.length">
+            <q-pagination
+                size="20px"
+                v-model="currentPage"
+                boundary-links
+                direction-links
+                :max="totalPages"
+                :max-pages="4"
+            />
+        </div>
     </q-page>
 </template>
 <script>
@@ -95,6 +105,7 @@ export default defineComponent({
     },
     data() {
         return {
+            currentPage: counterStore.pageNumber,
             reps: null,
         };
     },
@@ -104,6 +115,8 @@ export default defineComponent({
                 reps: this.reps,
             };
             await counterStore.addCounter(payload);
+            this.currentPage = 1;
+            counterStore.pageNumber = 1;
             await counterStore.getCounters();
             this.reps = null;
         },
@@ -117,16 +130,6 @@ export default defineComponent({
             const datestring = `${d.getDate()}/${
                 d.getMonth() + 1
             }/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
-            const datestrin =
-                d.getDate() +
-                "-" +
-                (d.getMonth() + 1) +
-                "-" +
-                d.getFullYear() +
-                " " +
-                d.getHours() +
-                ":" +
-                d.getMinutes();
             return datestring;
         },
     },
@@ -139,6 +142,27 @@ export default defineComponent({
         },
         counters() {
             return counterStore.counters;
+        },
+        totalPages() {
+            return counterStore.totalPages;
+        },
+        pageNumber() {
+            return counterStore.pageNumber;
+        },
+        pageSize() {
+            return counterStore.pageSize;
+        },
+        pagination() {
+            return {
+                page: this.pageNumber,
+                rowsPerPage: this.pageSize,
+            };
+        },
+    },
+    watch: {
+        currentPage(newValue) {
+            counterStore.pageNumber = newValue;
+            counterStore.getCounters();
         },
     },
 });

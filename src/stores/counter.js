@@ -6,7 +6,7 @@ export const useCounterStore = defineStore("counter", {
         bar_id: null,
         counters: [],
         totalCounters: 0,
-        pageSize: 15,
+        pageSize: 10,
         pageNumber: 1,
         next: null,
         prev: null,
@@ -18,14 +18,19 @@ export const useCounterStore = defineStore("counter", {
         baseURL() {
             return `/api/bars/${this.bar_id}/counter/`;
         },
+        queryString() {
+            let qs = `?page=${this.pageNumber}&page_size=${this.pageSize}`;
+            return qs;
+        },
     },
     actions: {
         async getCounters() {
             if (!this.bar_id) {
                 return;
             }
+            const url = this.baseURL + this.queryString;
             const response = api
-                .get(this.baseURL)
+                .get(url)
                 .then((response) => {
                     this.counters = response.data.results;
                     this.totalCounters = response.data.count;
