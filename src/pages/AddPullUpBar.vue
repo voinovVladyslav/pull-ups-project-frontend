@@ -96,13 +96,6 @@ export default defineComponent({
                         Number.parseFloat(this.latitude),
                     ],
                 },
-                address: {
-                    country: "string",
-                    city: "string",
-                    street: "string",
-                    number: "string",
-                    postal_code: "string",
-                },
             };
             if (this.title) {
                 payload["title"] = this.title;
