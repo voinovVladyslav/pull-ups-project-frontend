@@ -35,9 +35,9 @@ export default route(function (/* { store, ssrContext } */) {
         history: createHistory(process.env.VUE_ROUTER_BASE),
     });
 
-    Router.beforeEach((to, from, next) => {
+    Router.beforeEach(async (to, from, next) => {
         if (!authStore.isAuthenticated) {
-            authStore.getProfileData();
+            await authStore.getProfileData();
         }
         if (to.meta.unauthenticatedOnly && authStore.isAuthenticated) {
             return next("/");
