@@ -49,6 +49,15 @@ const routes = [
                 },
             },
             {
+                path: "/add-pull-up-bar",
+                component: () => import("pages/AddPullUpBar.vue"),
+                meta: {
+                    authOnly: false,
+                    adminOnly: true,
+                    unauthenticatedOnly: false,
+                },
+            },
+            {
                 path: "/workout/:id/",
                 component: () => import("pages/WorkoutPage.vue"),
                 meta: {

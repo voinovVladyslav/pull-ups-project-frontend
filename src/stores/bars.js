@@ -109,5 +109,25 @@ export const useBarsStore = defineStore("bars", {
                 });
             return res;
         },
+        async addBar(payload) {
+            const url = "/api/bars/";
+            const res = await api
+                .post(url, payload)
+                .then((response) => {
+                    Notify.create({
+                        message: "Successfully created new pull up bar",
+                        color: "positive",
+                    });
+                    return true;
+                })
+                .catch((error) => {
+                    Notify.create({
+                        message: "Failed to create pull up bar",
+                        color: "negative",
+                    });
+                    return false;
+                });
+            return res;
+        },
     },
 });
