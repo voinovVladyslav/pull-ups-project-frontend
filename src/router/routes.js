@@ -58,6 +58,15 @@ const routes = [
                 },
             },
             {
+                path: "/bar/:id/edit",
+                component: () => import("pages/EditPullUpBar.vue"),
+                meta: {
+                    authOnly: false,
+                    adminOnly: true,
+                    unauthenticatedOnly: false,
+                },
+            },
+            {
                 path: "/workout/:id/",
                 component: () => import("pages/WorkoutPage.vue"),
                 meta: {

@@ -57,6 +57,7 @@ export const useBarsStore = defineStore("bars", {
                 .catch((error) => {
                     router.push("/");
                 });
+            return res;
         },
         async getFavoriteBars() {
             const url = "/api/bars/favorites/" + this.queryString;
@@ -123,6 +124,26 @@ export const useBarsStore = defineStore("bars", {
                 .catch((error) => {
                     Notify.create({
                         message: "Failed to create pull up bar",
+                        color: "negative",
+                    });
+                    return false;
+                });
+            return res;
+        },
+        async editBar(id, payload) {
+            const url = `/api/bars/${id}/`;
+            const res = await api
+                .patch(url, payload)
+                .then((response) => {
+                    Notify.create({
+                        message: "Successfully updated new pull up bar",
+                        color: "positive",
+                    });
+                    return true;
+                })
+                .catch((error) => {
+                    Notify.create({
+                        message: "Failed to update pull up bar",
                         color: "negative",
                     });
                     return false;

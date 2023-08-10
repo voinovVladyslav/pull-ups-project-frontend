@@ -83,6 +83,17 @@
                                                 Calculating...
                                             </q-item-section>
                                         </q-item>
+                                        <q-item
+                                            v-if="isAdmin"
+                                            v-close-popup
+                                            clickable
+                                        >
+                                            <q-item-section
+                                                @click="editBar(bar.id)"
+                                            >
+                                                Edit Bar
+                                            </q-item-section>
+                                        </q-item>
                                     </q-list>
                                 </q-menu>
                             </q-icon>
@@ -145,6 +156,9 @@ export default defineComponent({
         isAuthenticated() {
             return authStore.isAuthenticated;
         },
+        isAdmin() {
+            return authStore.isStaff;
+        },
     },
     watch: {
         showClosest(newValue) {
@@ -187,6 +201,9 @@ export default defineComponent({
         },
         goToWorkout(id) {
             return this.$router.push(`/workout/${id}/`);
+        },
+        editBar(id) {
+            return this.$router.push(`/bar/${id}/edit`);
         },
     },
 });
