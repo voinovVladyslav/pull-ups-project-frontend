@@ -150,5 +150,25 @@ export const useBarsStore = defineStore("bars", {
                 });
             return res;
         },
+        async deleteBar(id) {
+            const url = `/api/bars/${id}/`;
+            const res = await api
+                .delete(url)
+                .then((response) => {
+                    Notify.create({
+                        message: "Successfully deleted pull up bar",
+                        color: "positive",
+                    });
+                    return true;
+                })
+                .catch((error) => {
+                    Notify.create({
+                        message: "Failed to delete pull up bar",
+                        color: "negative",
+                    });
+                    return false;
+                });
+            return res;
+        },
     },
 });

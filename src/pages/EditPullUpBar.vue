@@ -1,5 +1,27 @@
 <template>
     <q-page>
+        <q-dialog v-model="alert">
+            <q-card>
+                <q-card-section>
+                    <div class="text-h6">Confirm</div>
+                </q-card-section>
+
+                <q-card-section class="q-pt-none">
+                    Do you want to delete this pull up bar?
+                </q-card-section>
+
+                <q-card-actions align="right" class="text-primary">
+                    <q-btn flat label="Cancel" color="primary" v-close-popup />
+                    <q-btn
+                        flat
+                        label="Delete"
+                        color="negative"
+                        @click="deleteBar"
+                        v-close-popup
+                    />
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
         <h6 class="text-center q-my-md">Add new pull up bar</h6>
         <q-form
             @submit.prevent="submitForm"
@@ -47,6 +69,16 @@
                     @click="fillLocation"
                 ></q-btn>
             </div>
+            <div class="col-12 row justify-center q-pa-md q-mt-md">
+                <q-btn
+                    type="button"
+                    unelevated
+                    color="negative"
+                    class="col-10"
+                    label="Delete bar"
+                    @click="alert = true"
+                ></q-btn>
+            </div>
         </q-form>
     </q-page>
 </template>
@@ -83,6 +115,7 @@ export default defineComponent({
     data() {
         return {
             loading: false,
+            alert: false,
         };
     },
     methods: {
@@ -114,6 +147,15 @@ export default defineComponent({
                 payload["title"] = this.title;
             }
             return payload;
+        },
+        async deleteBar() {
+            this.loading = true;
+            const response = await barsStore.deleteBar(this.bar.id);
+            this.loading = false;
+            if (!response) {
+                return;
+            }
+            this.$router.push("/");
         },
     },
     computed: {
