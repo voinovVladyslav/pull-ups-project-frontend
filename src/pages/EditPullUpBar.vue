@@ -51,7 +51,7 @@
     </q-page>
 </template>
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import { useBarsStore } from "src/stores/bars";
 import { useGeolocationStore } from "src/stores/geolocation";
 import { useRoute } from "vue-router";
@@ -63,12 +63,25 @@ export default defineComponent({
     name: "EditPullUpBar",
     setup() {
         geolocationStore.getLocation();
+        const title = ref(null);
+        const longitude = ref(null);
+        const latitude = ref(null);
+        onMounted(async () => {
+            const route = useRoute();
+            const barId = route.params.id;
+            const res = await barsStore.getBardById(barId);
+            title.value = barsStore.bar.title;
+            longitude.value = barsStore.bar.location.coordinates[0];
+            latitude.value = barsStore.bar.location.coordinates[1];
+        });
+        return {
+            title,
+            longitude,
+            latitude,
+        };
     },
     data() {
         return {
-            longitude: null,
-            latitude: null,
-            title: null,
             loading: false,
         };
     },
