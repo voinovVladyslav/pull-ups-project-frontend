@@ -1,6 +1,26 @@
 <template>
     <q-page>
         <div class="q-pa-md row">
+            <div class="col-12 row justify-center">
+                <h5 class="q-mb-md q-mt-none">Favorites</h5>
+            </div>
+            <div class="col-12 row justify-center">
+                <q-btn-group spread class="col-10">
+                    <q-btn
+                        label="Closest first"
+                        @click="showClosest = true"
+                        :color="showClosest ? 'primary' : 'white'"
+                        :text-color="showClosest ? 'white' : 'black'"
+                        :disable="!location"
+                    ></q-btn>
+                    <q-btn
+                        label="Newest first"
+                        :color="!showClosest ? 'primary' : 'white'"
+                        :text-color="!showClosest ? 'white' : 'black'"
+                        @click="showClosest = false"
+                    ></q-btn>
+                </q-btn-group>
+            </div>
             <div class="col-12 q-mt-md">
                 <q-list>
                     <q-item
@@ -101,6 +121,15 @@
                     </q-item>
                 </q-list>
             </div>
+            <div class="col-12 row justify-center q-mt-md">
+                <q-pagination
+                    v-model="currentPage"
+                    boundary-links
+                    direction-links
+                    :max="totalPages"
+                    :max-pages="6"
+                />
+            </div>
         </div>
     </q-page>
 </template>
@@ -124,6 +153,7 @@ export default defineComponent({
     name: "FavoriteBars",
     data() {
         return {
+            currentPage: barsStore.pageNumber,
             showClosest: false,
         };
     },
@@ -161,6 +191,10 @@ export default defineComponent({
         },
     },
     watch: {
+        currentPage(newValue) {
+            barsStore.pageNumber = newValue;
+            barsStore.getFavoriteBars();
+        },
         showClosest(newValue) {
             if (!this.location) {
                 this.showClosest = false;

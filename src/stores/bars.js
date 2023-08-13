@@ -8,7 +8,7 @@ export const useBarsStore = defineStore("bars", {
         bars: [],
         bar: null,
         totalBars: 0,
-        pageSize: 15,
+        pageSize: 20,
         perPageVariants: [20, 50, 100],
         pageNumber: 1,
         referencePoint: null,
@@ -64,7 +64,10 @@ export const useBarsStore = defineStore("bars", {
             const res = await api
                 .get(url)
                 .then((response) => {
-                    this.bars = response.data;
+                    this.bars = response.data.results;
+                    this.totalBars = response.data.count;
+                    this.next = !!response.data.next;
+                    this.prev = !!response.data.previous;
                     return true;
                 })
                 .catch((error) => {

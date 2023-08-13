@@ -2,6 +2,9 @@
     <q-page class="">
         <div class="q-pa-md row">
             <div class="col-12 row justify-center">
+                <h5 class="q-mb-md q-mt-none">Discover</h5>
+            </div>
+            <div class="col-12 row justify-center">
                 <q-btn-group spread class="col-10">
                     <q-btn
                         label="Closest first"
@@ -24,12 +27,13 @@
                         v-for="bar in bars"
                         :key="bar.id"
                         class="row justify-center"
+                        :class="{ favorite: bar.is_favorite }"
                     >
                         <q-item-section class="col-3 text-center">
                             {{ bar.id }}
                         </q-item-section>
                         <q-item-section class="col-3 text-center">
-                            {{ bar.title }}
+                            {{ truncate(bar.title, 10) }}
                         </q-item-section>
                         <q-item-section class="col-3 text-center">
                             <div v-if="location">
@@ -65,6 +69,7 @@
                                             </q-item-section>
                                         </q-item>
                                         <q-item
+                                            v-if="!bar.is_favorite"
                                             clickable
                                             v-close-popup
                                             @click="addToFavorite(bar.id)"
@@ -72,6 +77,18 @@
                                         >
                                             <q-item-section>
                                                 Add to Favorite
+                                            </q-item-section>
+                                        </q-item>
+
+                                        <q-item
+                                            v-else
+                                            clickable
+                                            v-close-popup
+                                            @click="removeFromFavorite(bar.id)"
+                                            :disable="!isAuthenticated"
+                                        >
+                                            <q-item-section>
+                                                Remove from Favorite
                                             </q-item-section>
                                         </q-item>
                                         <q-item clickable v-close-popup>
@@ -222,6 +239,12 @@ export default defineComponent({
             barsStore.pageNumber = 1;
             await barsStore.getBars();
         },
+        async removeFromFavorite(id) {
+            await barsStore.removeFromFavorite(id);
+            this.currentPage = 1;
+            barsStore.pageNumber = 1;
+            await barsStore.getBars();
+        },
         updatePagination(newPagination) {
             barsStore.pageSize = newPagination.rowsPerPage;
             barsStore.pageNumber = 1;
@@ -243,6 +266,15 @@ export default defineComponent({
         editBar(id) {
             return this.$router.push(`/bar/${id}/edit`);
         },
+        truncate(str, n) {
+            return str.length > n ? str.slice(0, n - 1) + "..." : str;
+        },
     },
 });
 </script>
+
+<style scoped>
+.favorite {
+    color: #e086d3;
+}
+</style>
