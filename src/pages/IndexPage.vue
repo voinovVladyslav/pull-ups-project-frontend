@@ -193,8 +193,6 @@ export default defineComponent({
     },
     computed: {
         bars() {
-            const bar = barsStore.bars;
-            return [];
             return barsStore.bars;
         },
         location() {
