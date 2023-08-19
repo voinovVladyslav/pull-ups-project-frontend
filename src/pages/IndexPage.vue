@@ -4,145 +4,161 @@
             <div class="col-12 row justify-center">
                 <h5 class="q-mb-md q-mt-none">Discover</h5>
             </div>
-            <div class="col-12 row justify-center">
-                <q-btn-group spread class="col-10">
-                    <q-btn
-                        label="Closest first"
-                        @click="showClosest = true"
-                        :color="showClosest ? 'primary' : 'white'"
-                        :text-color="showClosest ? 'white' : 'black'"
-                        :disable="!location"
-                    ></q-btn>
-                    <q-btn
-                        label="Newest first"
-                        :color="!showClosest ? 'primary' : 'white'"
-                        :text-color="!showClosest ? 'white' : 'black'"
-                        @click="showClosest = false"
-                    ></q-btn>
-                </q-btn-group>
-            </div>
-            <div class="col-12 q-mt-md">
-                <q-list>
-                    <q-item
-                        v-for="bar in bars"
-                        :key="bar.id"
-                        class="row justify-center"
-                        :class="{ favorite: bar.is_favorite }"
-                    >
-                        <q-item-section class="col-3 text-center">
-                            {{ bar.id }}
-                        </q-item-section>
-                        <q-item-section class="col-3 text-center">
-                            {{ truncate(bar.title, 10) }}
-                        </q-item-section>
-                        <q-item-section class="col-3 text-center">
-                            <div v-if="location">
-                                {{
-                                    roundToTwoDigits(
-                                        distanceToBar(
-                                            location,
-                                            bar.location.coordinates
+            <div class="col-12 row justify-center" v-if="bars.length">
+                <div class="col-12 row justify-center">
+                    <q-btn-group spread class="col-10">
+                        <q-btn
+                            label="Closest first"
+                            @click="showClosest = true"
+                            :color="showClosest ? 'primary' : 'white'"
+                            :text-color="showClosest ? 'white' : 'black'"
+                            :disable="!location"
+                        ></q-btn>
+                        <q-btn
+                            label="Newest first"
+                            :color="!showClosest ? 'primary' : 'white'"
+                            :text-color="!showClosest ? 'white' : 'black'"
+                            @click="showClosest = false"
+                        ></q-btn>
+                    </q-btn-group>
+                </div>
+                <div class="col-12 q-mt-md">
+                    <q-list>
+                        <q-item
+                            v-for="bar in bars"
+                            :key="bar.id"
+                            class="row justify-center"
+                            :class="{ favorite: bar.is_favorite }"
+                        >
+                            <q-item-section class="col-3 text-center">
+                                {{ bar.id }}
+                            </q-item-section>
+                            <q-item-section class="col-3 text-center">
+                                {{ truncate(bar.title, 10) }}
+                            </q-item-section>
+                            <q-item-section class="col-3 text-center">
+                                <div v-if="location">
+                                    {{
+                                        roundToTwoDigits(
+                                            distanceToBar(
+                                                location,
+                                                bar.location.coordinates
+                                            )
                                         )
-                                    )
-                                }}
-                                km
-                            </div>
-                            <div v-else>Calculating...</div>
-                        </q-item-section>
-                        <q-item-section class="col-3">
-                            <q-icon
-                                name="more_vert"
-                                clickable
-                                size="sm"
-                                style="margin-left: auto; margin-right: auto"
-                            >
-                                <q-menu auto-close fit style="min-width: 150px">
-                                    <q-list>
-                                        <q-item
-                                            clickable
-                                            v-close-popup
-                                            :disable="!isAuthenticated"
-                                            @click="goToWorkout(bar.id)"
-                                        >
-                                            <q-item-section>
-                                                Start Workout
-                                            </q-item-section>
-                                        </q-item>
-                                        <q-item
-                                            v-if="!bar.is_favorite"
-                                            clickable
-                                            v-close-popup
-                                            @click="addToFavorite(bar.id)"
-                                            :disable="!isAuthenticated"
-                                        >
-                                            <q-item-section>
-                                                Add to Favorite
-                                            </q-item-section>
-                                        </q-item>
+                                    }}
+                                    km
+                                </div>
+                                <div v-else>Calculating...</div>
+                            </q-item-section>
+                            <q-item-section class="col-3">
+                                <q-icon
+                                    name="more_vert"
+                                    clickable
+                                    size="sm"
+                                    style="
+                                        margin-left: auto;
+                                        margin-right: auto;
+                                    "
+                                >
+                                    <q-menu
+                                        auto-close
+                                        fit
+                                        style="min-width: 150px"
+                                    >
+                                        <q-list>
+                                            <q-item
+                                                clickable
+                                                v-close-popup
+                                                :disable="!isAuthenticated"
+                                                @click="goToWorkout(bar.id)"
+                                            >
+                                                <q-item-section>
+                                                    Start Workout
+                                                </q-item-section>
+                                            </q-item>
+                                            <q-item
+                                                v-if="!bar.is_favorite"
+                                                clickable
+                                                v-close-popup
+                                                @click="addToFavorite(bar.id)"
+                                                :disable="!isAuthenticated"
+                                            >
+                                                <q-item-section>
+                                                    Add to Favorite
+                                                </q-item-section>
+                                            </q-item>
 
-                                        <q-item
-                                            v-else
-                                            clickable
-                                            v-close-popup
-                                            @click="removeFromFavorite(bar.id)"
-                                            :disable="!isAuthenticated"
-                                        >
-                                            <q-item-section>
-                                                Remove from Favorite
-                                            </q-item-section>
-                                        </q-item>
-                                        <q-item clickable v-close-popup>
-                                            <q-item-section
-                                                v-if="location"
-                                                color="black"
+                                            <q-item
+                                                v-else
+                                                clickable
+                                                v-close-popup
+                                                @click="
+                                                    removeFromFavorite(bar.id)
+                                                "
+                                                :disable="!isAuthenticated"
                                             >
-                                                <a
-                                                    style="
-                                                        text-decoration: none;
-                                                        color: black;
-                                                    "
-                                                    target="_blank"
-                                                    :href="
-                                                        createLinkToGoogleMaps(
-                                                            bar.location
-                                                                .coordinates,
-                                                            location
-                                                        )
-                                                    "
+                                                <q-item-section>
+                                                    Remove from Favorite
+                                                </q-item-section>
+                                            </q-item>
+                                            <q-item clickable v-close-popup>
+                                                <q-item-section
+                                                    v-if="location"
+                                                    color="black"
                                                 >
-                                                    View on Map
-                                                </a>
-                                            </q-item-section>
-                                            <q-item-section v-else>
-                                                Calculating...
-                                            </q-item-section>
-                                        </q-item>
-                                        <q-item
-                                            v-if="isAdmin"
-                                            clickable
-                                            v-close-popup
-                                        >
-                                            <q-item-section
-                                                @click="editBar(bar.id)"
+                                                    <a
+                                                        style="
+                                                            text-decoration: none;
+                                                            color: black;
+                                                        "
+                                                        target="_blank"
+                                                        :href="
+                                                            createLinkToGoogleMaps(
+                                                                bar.location
+                                                                    .coordinates,
+                                                                location
+                                                            )
+                                                        "
+                                                    >
+                                                        View on Map
+                                                    </a>
+                                                </q-item-section>
+                                                <q-item-section v-else>
+                                                    Calculating...
+                                                </q-item-section>
+                                            </q-item>
+                                            <q-item
+                                                v-if="isAdmin"
+                                                clickable
+                                                v-close-popup
                                             >
-                                                Edit Bar
-                                            </q-item-section>
-                                        </q-item>
-                                    </q-list>
-                                </q-menu>
-                            </q-icon>
-                        </q-item-section>
-                    </q-item>
-                </q-list>
+                                                <q-item-section
+                                                    @click="editBar(bar.id)"
+                                                >
+                                                    Edit Bar
+                                                </q-item-section>
+                                            </q-item>
+                                        </q-list>
+                                    </q-menu>
+                                </q-icon>
+                            </q-item-section>
+                        </q-item>
+                    </q-list>
+                </div>
+                <div class="col-12 row justify-center q-mt-md">
+                    <q-pagination
+                        v-model="currentPage"
+                        boundary-links
+                        direction-links
+                        :max="totalPages"
+                        :max-pages="6"
+                    />
+                </div>
             </div>
-            <div class="col-12 row justify-center q-mt-md">
-                <q-pagination
-                    v-model="currentPage"
-                    boundary-links
-                    direction-links
-                    :max="totalPages"
-                    :max-pages="6"
-                />
+            <div v-else class="col-12 row justify-center">
+                <div class="q-pa-md text-center">
+                    <p>No pull up bars yet</p>
+                </div>
             </div>
         </div>
     </q-page>
@@ -177,6 +193,8 @@ export default defineComponent({
     },
     computed: {
         bars() {
+            const bar = barsStore.bars;
+            return [];
             return barsStore.bars;
         },
         location() {
