@@ -1,0 +1,28 @@
+name: Deploy to production
+on: [workflow_dispatch]
+jobs:
+    deploy:
+        name: Deploy
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            - name: Set up SSH key
+              run: |
+                  mkdir -p ~/.ssh
+                  echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+                  chmod 600 ~/.ssh/id_rsa
+                  ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+            - name: Deploy to server
+              env:
+                  BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+              run: |
+                  echo "Starting deployment..."
+                  ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_DOMAIN }} "cd /opt/pull_up_project/frontend &&
+                      cp .env.production .env &&
+                      git fetch &&
+                      git switch $BRANCH_NAME &&
+                      git pull origin $BRANCH_NAME &&
+                      npm i &&
+                      quasar build"
+                  echo "Deployment completed."
