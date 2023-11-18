@@ -14,6 +14,7 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { NO_IMAGE_URL, LOCKED_ACHIEVEMENT_URL } from 'src/constants/static'
 
 export default defineComponent({
     name: "AchievementCard",
@@ -21,9 +22,9 @@ export default defineComponent({
     methods: {
         getImageToDisplay(achievement) {
             if (!achievement.done) {
-                return 'src/assets/locked_achievement.png'
+                return LOCKED_ACHIEVEMENT_URL
             }
-            return achievement.image ? achievement.image : 'src/assets/no_image_available.png'
+            return achievement.image ? achievement.image : NO_IMAGE_URL
         }
     }
 })
