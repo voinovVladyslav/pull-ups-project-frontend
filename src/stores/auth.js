@@ -6,6 +6,7 @@ export const useAuthStore = defineStore("auth", {
         token: null,
         email: null,
         isStaff: false,
+        stats: {},
     }),
     getters: {
         isAuthenticated() {
@@ -87,6 +88,17 @@ export const useAuthStore = defineStore("auth", {
                 })
                 .catch((error) => {
                     return false;
+                });
+            return res;
+        },
+        async getStats() {
+            const res = await api
+                .get("/api/user/statistics/")
+                .then((response) => {
+                    this.stats = response.data;
+                })
+                .catch((error) => {
+                    console.log(error);
                 });
             return res;
         },

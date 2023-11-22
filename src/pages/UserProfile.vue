@@ -6,52 +6,33 @@
                 <strong>Email:</strong> {{ email }}
             </div>
             <div v-if="!editForm" class="col-12 row justify-between">
-                <q-btn
-                    class="col-5"
-                    label="Edit Profile"
-                    color="primary"
-                    @click="openEditForm"
-                ></q-btn>
+                <q-btn class="col-5" label="Edit Profile" color="primary"
+                    @click="openEditForm"></q-btn>
 
-                <q-btn
-                    class="col-5"
-                    label="Logout"
-                    color="negative"
-                    type="button"
-                    @click="logout"
-                >
+                <q-btn class="col-5" label="Logout" color="negative" type="button"
+                    @click="logout">
                 </q-btn>
             </div>
             <div v-else class="col-12 row">
-                <q-form
-                    class="q-gutter-md col-12 row justify-center"
-                    @submit="submitForm"
-                    @reset="null"
-                >
+                <q-form class="q-gutter-md col-12 row justify-center"
+                    @submit="submitForm" @reset="null">
                     <div class="col-11">
                         <q-input label="Email" v-model="editEmail"></q-input>
                     </div>
 
                     <q-space></q-space>
                     <div class="col-11 row justify-between">
-                        <q-btn
-                            class="col-5"
-                            label="Save"
-                            color="primary"
-                            type="submit"
-                        ></q-btn>
-                        <q-btn
-                            class="col-5"
-                            label="Cancel"
-                            color="grey"
-                            type="button"
-                            @click="editForm = !editForm"
-                        ></q-btn>
+                        <q-btn class="col-5" label="Save" color="primary"
+                            type="submit"></q-btn>
+                        <q-btn class="col-5" label="Cancel" color="grey"
+                            type="button" @click="editForm = !editForm"></q-btn>
                     </div>
                 </q-form>
             </div>
 
-            <div class="col-12 q-mt-md row"></div>
+            <div class="col-12 q-mt-md row">
+                <DisplayStatistics :stats="stats"></DisplayStatistics>
+            </div>
         </div>
     </q-page>
 </template>
@@ -59,11 +40,18 @@
 <script>
 import { defineComponent } from "vue";
 import { useAuthStore } from "src/stores/auth";
+import DisplayStatistics from "src/components/DisplayStatistics.vue";
 
 const authStore = useAuthStore();
 
 export default defineComponent({
     name: "UserProfile",
+    components: {
+        DisplayStatistics
+    },
+    setup() {
+        authStore.getStats()
+    },
     data: () => ({
         editEmail: null,
         editPassword1: null,
@@ -74,6 +62,9 @@ export default defineComponent({
         email() {
             return authStore.email;
         },
+        stats() {
+            return authStore.stats;
+        }
     },
     methods: {
         async submitForm() {
