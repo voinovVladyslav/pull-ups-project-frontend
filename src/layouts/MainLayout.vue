@@ -1,7 +1,6 @@
 <template>
     <q-layout view="hHh lpR fFf">
         <the-header @toggleLeftDrawer="toggleLeftDrawer"></the-header>
-
         <q-drawer v-model="leftDrawerOpen" side="left" overlay behavior="mobile"
             elevated>
             <q-scroll-area class="fit">
@@ -12,6 +11,16 @@
                                 <q-icon name="person"></q-icon>
                             </q-item-section>
                             <q-item-section> Profile </q-item-section>
+                        </q-item>
+                        <q-separator></q-separator>
+                    </div>
+                    <div v-if="isAuthenticated">
+                        <q-item clickable :active="false" v-ripple
+                            @click="notificationDrawerOpen = !notificationDrawerOpen">
+                            <q-item-section avatar>
+                                <q-icon name="notifications"></q-icon>
+                            </q-item-section>
+                            <q-item-section> Notifications </q-item-section>
                         </q-item>
                         <q-separator></q-separator>
                     </div>
@@ -75,6 +84,23 @@
             </q-scroll-area>
         </q-drawer>
 
+        <q-drawer v-model="notificationDrawerOpen" side="left" overlay
+            behavior="mobile" elevated>
+            <q-scroll-area class="fit">
+                <q-list>
+                    <div v-for="notification in notifications"
+                        :key="notification.id">
+                        <q-item :to="notification.redirect_to">
+                            <q-item-section>
+                                {{ notification.message }}
+                            </q-item-section>
+                        </q-item>
+                        <q-separator></q-separator>
+                    </div>
+                </q-list>
+            </q-scroll-area>
+        </q-drawer>
+
         <q-page-container>
             <router-view />
         </q-page-container>
@@ -83,8 +109,10 @@
 
 <script>
 import { useAuthStore } from "src/stores/auth";
+import { useNotificationsStore } from "src/stores/notifications"
 
 const authStore = useAuthStore();
+const notificationsStore = useNotificationsStore()
 
 export default {
     setup() {
@@ -93,11 +121,13 @@ export default {
                 await authStore.getProfileData();
             }
         }
+        notificationsStore.getUnreadNotifications()
         authenticateUser();
     },
     data() {
         return {
             leftDrawerOpen: false,
+            notificationDrawerOpen: false,
         };
     },
     methods: {
@@ -112,6 +142,9 @@ export default {
         isAuthenticated() {
             return authStore.isAuthenticated;
         },
+        notifications() {
+            return notificationsStore.notifications
+        }
     },
 };
 </script>
