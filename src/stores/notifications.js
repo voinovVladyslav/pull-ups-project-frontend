@@ -24,6 +24,13 @@ export const useNotificationsStore = defineStore("notifications", {
                 });
         },
         async markNotificationsAsRead() {
+            if (!this.notifications.length) {
+                Notify.create({
+                    message: "You don't have unread notifications",
+                    color: "info",
+                });
+                return;
+            }
             const url = "/api/notifications/mark-read/";
             const response = await api
                 .post(url)

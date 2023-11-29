@@ -108,6 +108,12 @@
                         </q-item>
                         <q-separator></q-separator>
                     </div>
+                    <div v-if="!notifications.length" class="q-mt-md text-center">
+                        <q-item>
+                            <q-item-section>You don't have unread
+                                notifications</q-item-section>
+                        </q-item>
+                    </div>
                 </q-list>
             </q-scroll-area>
         </q-drawer>
