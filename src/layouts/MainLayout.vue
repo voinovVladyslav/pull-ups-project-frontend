@@ -88,6 +88,17 @@
             behavior="mobile" elevated>
             <q-scroll-area class="fit">
                 <q-list>
+                    <div>
+                        <q-item v-ripple>
+                            <q-item-section>Read All</q-item-section>
+                            <q-item-section avatar>
+                                <q-icon name="checklist_rtl" size="md"
+                                    class="cursor-pointer"
+                                    @click="markNotificationsAsRead" />
+                            </q-item-section>
+                        </q-item>
+                        <q-separator></q-separator>
+                    </div>
                     <div v-for="notification in notifications"
                         :key="notification.id">
                         <q-item :to="notification.redirect_to">
@@ -134,6 +145,10 @@ export default {
         toggleLeftDrawer() {
             this.leftDrawerOpen = !this.leftDrawerOpen;
         },
+        async markNotificationsAsRead() {
+            await notificationsStore.markNotificationsAsRead()
+            await notificationsStore.getUnreadNotifications()
+        }
     },
     computed: {
         isAdmin() {
