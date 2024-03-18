@@ -40,38 +40,11 @@ const routes = [
                 },
             },
             {
-                path: "/favorites",
-                component: () => import("pages/FavoriteBars.vue"),
-                meta: {
-                    authOnly: true,
-                    adminOnly: false,
-                    unauthenticatedOnly: false,
-                },
-            },
-            {
-                path: "/add-pull-up-bar",
-                component: () => import("pages/AddPullUpBar.vue"),
-                meta: {
-                    authOnly: false,
-                    adminOnly: true,
-                    unauthenticatedOnly: false,
-                },
-            },
-            {
                 path: "/achievements",
                 component: () => import("pages/AchievementsPage.vue"),
                 meta: {
                     authOnly: true,
                     adminOnly: false,
-                    unauthenticatedOnly: false,
-                },
-            },
-            {
-                path: "/bar/:id/edit",
-                component: () => import("pages/EditPullUpBar.vue"),
-                meta: {
-                    authOnly: false,
-                    adminOnly: true,
                     unauthenticatedOnly: false,
                 },
             },

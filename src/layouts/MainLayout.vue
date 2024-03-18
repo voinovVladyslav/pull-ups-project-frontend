@@ -6,7 +6,8 @@
             <q-scroll-area class="fit">
                 <q-list>
                     <div v-if="isAuthenticated">
-                        <q-item clickable :active="false" v-ripple to="/profile">
+                        <q-item clickable :active="false" v-ripple
+                            to="/profile">
                             <q-item-section avatar>
                                 <q-icon name="person"></q-icon>
                             </q-item-section>
@@ -53,15 +54,6 @@
                         <q-separator></q-separator>
                     </div>
                     <div v-if="isAuthenticated">
-                        <q-item clickable :active="false" v-ripple to="/favorites">
-                            <q-item-section avatar>
-                                <q-icon name="star"></q-icon>
-                            </q-item-section>
-                            <q-item-section> Favorites </q-item-section>
-                        </q-item>
-                        <q-separator></q-separator>
-                    </div>
-                    <div v-if="isAuthenticated">
                         <q-item :active="false" clickable v-ripple
                             to="/achievements">
                             <q-item-section avatar>
@@ -70,15 +62,6 @@
                             <q-item-section> Achievements </q-item-section>
                         </q-item>
                         <q-separator></q-separator>
-                    </div>
-                    <div v-if="isAdmin">
-                        <q-item clickable :active="false" v-ripple
-                            to="/add-pull-up-bar">
-                            <q-item-section avatar>
-                                <q-icon name="add"></q-icon>
-                            </q-item-section>
-                            <q-item-section> Add Pull Up Bar </q-item-section>
-                        </q-item>
                     </div>
                 </q-list>
             </q-scroll-area>
@@ -108,7 +91,8 @@
                         </q-item>
                         <q-separator></q-separator>
                     </div>
-                    <div v-if="!notifications.length" class="q-mt-md text-center">
+                    <div v-if="!notifications.length"
+                        class="q-mt-md text-center">
                         <q-item>
                             <q-item-section>You don't have unread
                                 notifications</q-item-section>
