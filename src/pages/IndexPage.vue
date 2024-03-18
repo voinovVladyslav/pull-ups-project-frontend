@@ -4,208 +4,47 @@
             <div class="col-12 row justify-center">
                 <h5 class="q-mb-md q-mt-none">Discover</h5>
             </div>
-            <div class="col-12 row justify-center" v-if="bars.length">
-                <div class="col-12 row justify-center">
-                    <q-btn-group spread class="col-10">
-                        <q-btn
-                            label="Closest first"
-                            @click="showClosest = true"
-                            :color="showClosest ? 'primary' : 'white'"
-                            :text-color="showClosest ? 'white' : 'black'"
-                            :disable="!location"
-                        ></q-btn>
-                        <q-btn
-                            label="Newest first"
-                            :color="!showClosest ? 'primary' : 'white'"
-                            :text-color="!showClosest ? 'white' : 'black'"
-                            @click="showClosest = false"
-                        ></q-btn>
-                    </q-btn-group>
-                </div>
-                <div class="col-12 q-mt-md">
-                    <q-list>
-                        <q-item
-                            v-for="bar in bars"
-                            :key="bar.id"
-                            class="row justify-center"
-                            :class="{ favorite: bar.is_favorite }"
-                        >
-                            <q-item-section class="col-3 text-center">
-                                {{ bar.id }}
-                            </q-item-section>
-                            <q-item-section class="col-3 text-center">
-                                {{ truncate(bar.title, 10) }}
-                            </q-item-section>
-                            <q-item-section class="col-3 text-center">
-                                <div v-if="location">
-                                    {{
-                                        roundToTwoDigits(
-                                            distanceToBar(
-                                                location,
-                                                bar.location.coordinates
-                                            )
-                                        )
-                                    }}
-                                    km
-                                </div>
-                                <div v-else>Calculating...</div>
-                            </q-item-section>
-                            <q-item-section class="col-3">
-                                <q-icon
-                                    name="more_vert"
-                                    clickable
-                                    size="sm"
-                                    style="
-                                        margin-left: auto;
-                                        margin-right: auto;
-                                    "
-                                >
-                                    <q-menu
-                                        auto-close
-                                        fit
-                                        style="min-width: 150px"
-                                    >
-                                        <q-list>
-                                            <q-item
-                                                clickable
-                                                v-close-popup
-                                                :disable="!isAuthenticated"
-                                                @click="goToWorkout(bar.id)"
-                                            >
-                                                <q-item-section>
-                                                    Start Workout
-                                                </q-item-section>
-                                            </q-item>
-                                            <q-item
-                                                v-if="!bar.is_favorite"
-                                                clickable
-                                                v-close-popup
-                                                @click="addToFavorite(bar.id)"
-                                                :disable="!isAuthenticated"
-                                            >
-                                                <q-item-section>
-                                                    Add to Favorite
-                                                </q-item-section>
-                                            </q-item>
-
-                                            <q-item
-                                                v-else
-                                                clickable
-                                                v-close-popup
-                                                @click="
-                                                    removeFromFavorite(bar.id)
-                                                "
-                                                :disable="!isAuthenticated"
-                                            >
-                                                <q-item-section>
-                                                    Remove from Favorite
-                                                </q-item-section>
-                                            </q-item>
-                                            <q-item clickable v-close-popup>
-                                                <q-item-section
-                                                    v-if="location"
-                                                    color="black"
-                                                >
-                                                    <a
-                                                        style="
-                                                            text-decoration: none;
-                                                            color: black;
-                                                        "
-                                                        target="_blank"
-                                                        :href="
-                                                            createLinkToGoogleMaps(
-                                                                bar.location
-                                                                    .coordinates,
-                                                                location
-                                                            )
-                                                        "
-                                                    >
-                                                        View on Map
-                                                    </a>
-                                                </q-item-section>
-                                                <q-item-section v-else>
-                                                    Calculating...
-                                                </q-item-section>
-                                            </q-item>
-                                            <q-item
-                                                v-if="isAdmin"
-                                                clickable
-                                                v-close-popup
-                                            >
-                                                <q-item-section
-                                                    @click="editBar(bar.id)"
-                                                >
-                                                    Edit Bar
-                                                </q-item-section>
-                                            </q-item>
-                                        </q-list>
-                                    </q-menu>
-                                </q-icon>
-                            </q-item-section>
-                        </q-item>
-                    </q-list>
-                </div>
-                <div class="col-12 row justify-center q-mt-md">
-                    <q-pagination
-                        v-model="currentPage"
-                        boundary-links
-                        direction-links
-                        :max="totalPages"
-                        :max-pages="6"
-                    />
-                </div>
-            </div>
-            <div v-else class="col-12 row justify-center">
-                <div class="q-pa-md text-center">
-                    <p>No pull up bars yet</p>
-                </div>
-            </div>
         </div>
     </q-page>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import { useBarsStore } from "src/stores/bars";
 import { useGeolocationStore } from "src/stores/geolocation";
 import { useAuthStore } from "src/stores/auth";
-import {
-    roundToTwoDigits,
-    createLinkToGoogleMaps,
-    distanceToBar,
-} from "src/utils/bars";
+import { useTrainingGroundsStore } from "src/stores/tg";
 
-const barsStore = useBarsStore();
 const geolocationStore = useGeolocationStore();
 const authStore = useAuthStore();
+const tgStore = useTrainingGroundsStore()
 
 export default defineComponent({
     name: "IndexPage",
     data() {
         return {
-            currentPage: barsStore.pageNumber,
+            currentPage: tgStore.pagination.pageNumber,
             showClosest: false,
         };
     },
     setup() {
-        barsStore.getBars();
+        tgStore.getTraingGrounds()
         geolocationStore.getLocation();
     },
     computed: {
-        bars() {
-            return barsStore.bars;
+        trainingGrounds() {
+            return tgStore.trainingGrounds
         },
         location() {
             return geolocationStore.location;
         },
         pageNumber() {
-            return barsStore.pageNumber;
+            return tgStore.pagination.pageNumber;
         },
         pageSize() {
-            return barsStore.pageSize;
+            return tgStore.pagination.pageSize;
         },
         totalPages() {
-            return barsStore.totalPages;
+            return tgStore.totalPages;
         },
         pagination() {
             return {
@@ -223,8 +62,8 @@ export default defineComponent({
     },
     watch: {
         currentPage(newValue) {
-            barsStore.pageNumber = newValue;
-            barsStore.getBars();
+            tgStore.pagination.pageNumber = newValue;
+            tgStore.getTraingGrounds()
         },
         showClosest(newValue) {
             if (!this.location) {
@@ -236,61 +75,18 @@ export default defineComponent({
                     longitude: this.location.longitude,
                     latitude: this.location.latitude,
                 };
-                barsStore.referencePoint = refPoint;
-                barsStore.pageNumber = 1;
+                tgStore.filters.referencePoint = refPoint;
+                tgStore.pagination.pageNumber = 1;
                 this.currentPage = 1;
-                barsStore.getBars();
+                tgStore.getTraingGrounds()
             } else {
-                barsStore.referencePoint = null;
-                barsStore.pageNumber = 1;
+                tgStore.filters.referencePoint = null;
+                tgStore.pagination.pageNumber = 1;
                 this.currentPage = 1;
-                barsStore.getBars();
+                tgStore.trainingGrounds()
             }
         },
     },
-    methods: {
-        async addToFavorite(id) {
-            await barsStore.addToFavorite(id);
-            this.currentPage = 1;
-            barsStore.pageNumber = 1;
-            await barsStore.getBars();
-        },
-        async removeFromFavorite(id) {
-            await barsStore.removeFromFavorite(id);
-            this.currentPage = 1;
-            barsStore.pageNumber = 1;
-            await barsStore.getBars();
-        },
-        updatePagination(newPagination) {
-            barsStore.pageSize = newPagination.rowsPerPage;
-            barsStore.pageNumber = 1;
-            this.currentPage = 1;
-            barsStore.getBars();
-        },
-        distanceToBar(currentLocation, barCoords) {
-            return distanceToBar(currentLocation, barCoords);
-        },
-        roundToTwoDigits(number) {
-            return roundToTwoDigits(number);
-        },
-        createLinkToGoogleMaps(destinationPoint, location) {
-            return createLinkToGoogleMaps(destinationPoint, location);
-        },
-        goToWorkout(id) {
-            return this.$router.push(`/workout/${id}/`);
-        },
-        editBar(id) {
-            return this.$router.push(`/bar/${id}/edit`);
-        },
-        truncate(str, n) {
-            return str.length > n ? str.slice(0, n - 1) + "..." : str;
-        },
-    },
+    methods: {},
 });
 </script>
-
-<style scoped>
-.favorite {
-    color: #e086d3;
-}
-</style>
