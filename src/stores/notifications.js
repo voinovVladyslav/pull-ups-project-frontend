@@ -13,7 +13,7 @@ export const useNotificationsStore = defineStore("notifications", {
     },
     actions: {
         async getUnreadNotifications() {
-            const url = "/api/notifications" + this.unreadQueryString;
+            const url = "/api/notifications/" + this.unreadQueryString;
             const response = await api
                 .get(url)
                 .then((response) => {
