@@ -1,8 +1,12 @@
 <template>
-    <q-page class="">
-        <div class="q-pa-md row">
+    <q-page>
+        <div class="row">
             <div class="col-12 row justify-center">
                 <h5 class="q-mb-md q-mt-none">Discover</h5>
+            </div>
+            <div>
+                <TrainingGroundCard v-for="tg in trainingGrounds" :key="tg.id"
+                    :tg="tg" />
             </div>
         </div>
     </q-page>
@@ -13,6 +17,7 @@ import { defineComponent } from "vue";
 import { useGeolocationStore } from "src/stores/geolocation";
 import { useAuthStore } from "src/stores/auth";
 import { useTrainingGroundsStore } from "src/stores/tg";
+import TrainingGroundCard from "src/components/tg/TrainingGroundCard.vue";
 
 const geolocationStore = useGeolocationStore();
 const authStore = useAuthStore();
@@ -20,6 +25,7 @@ const tgStore = useTrainingGroundsStore()
 
 export default defineComponent({
     name: "IndexPage",
+    components: { TrainingGroundCard },
     data() {
         return {
             currentPage: tgStore.pagination.pageNumber,
