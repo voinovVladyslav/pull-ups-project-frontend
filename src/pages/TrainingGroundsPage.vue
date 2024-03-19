@@ -1,9 +1,6 @@
 <template>
     <q-page>
-        <div class="row">
-            <div class="col-12 row justify-center">
-                <h5 class="q-mb-md q-mt-none">Discover</h5>
-            </div>
+        <div class="row justify-center">
             <div>
                 <TrainingGroundCard v-for="tg in trainingGrounds" :key="tg.id"
                     :tg="tg" />
