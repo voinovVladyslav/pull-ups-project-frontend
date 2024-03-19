@@ -1,24 +1,34 @@
 <template>
-    <q-card class="row q-ma-md justify-between">
-        <q-card-section class="col-2 q-pa-sm">#{{ tg.id
-            }}</q-card-section>
-        <q-card-section class="col-2 q-pa-sm">Has pullup bar: {{ !!tg.pullupbar
-            }}</q-card-section>
-        <q-card-section class="col-2 q-pa-sm">Has dip station: {{
-            !!tg.dipstation
-        }}</q-card-section>
-        <q-card-section class="col-2 q-pa-sm">Add to favorite: {{ tg.is_favorite
-            }}</q-card-section>
-        <q-card-section v-if="location" class="col-2 q-pa-sm">{{
-            roundToTwoDigits(distance(location, tg.location.coordinates))
-        }} km</q-card-section>
-        <q-card-section v-else>
-            <q-spinner size="sm" />
+    <q-card class="row q-ma-md justify-between" style="min-height: 80px;">
+        <q-card-section class="col-1 q-pa-sm self-center">
+            <span class="align-center">#{{ tg.id }}</span>
         </q-card-section>
-        <q-card-actions>
-            <q-icon>
-
-            </q-icon>
+        <q-card-section class="col-2 text-center self-center q-pa-xs">
+            <span v-if="location">
+                {{ roundToTwoDigits(distance(location, tg.location.coordinates))
+                }} km
+            </span>
+            <span v-else>
+                <q-spinner size="xs" />
+            </span>
+        </q-card-section>
+        <q-card-section class="col-3 q-pa-sm self-center">
+            <div class="row justify-center">
+                <q-img v-if="!!tg.dipstation" class="col-3" src="dipstation.png"
+                    width="32px" />
+                <q-img v-if="!!tg.pullupbar" class="col-3" src="pullupbar.png"
+                    width="32px" />
+            </div>
+        </q-card-section>
+        <q-card-actions class="col-6 flex justify-center q-pa-none">
+            <q-icon v-if="tg.is_favorite" name="fa-solid fa-star" size="md"
+                color="yellow" class="cursor-pointer q-mx-sm" />
+            <q-icon v-else name="fa-regular fa-star" size="md" color="yellow"
+                class="cursor-pointer q-mx-sm" />
+            <q-icon name="fa-solid fa-map-location" size="md" color="primary"
+                class="cursor-pointer q-mx-sm" />
+            <q-icon name="fa-solid fa-circle-play" size="md" color="primary"
+                class="cursor-pointer q-mx-sm" />
         </q-card-actions>
     </q-card>
 </template>
@@ -46,5 +56,3 @@ export default defineComponent({
     },
 })
 </script>
-
-<style scoped></style>
