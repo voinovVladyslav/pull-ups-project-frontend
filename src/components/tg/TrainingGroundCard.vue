@@ -1,18 +1,18 @@
 <template>
-    <q-card class="row q-ma-md justify-between" style="min-height: 80px;">
-        <q-card-section class="col-1 q-pa-sm self-center">
-            <span class="align-center">#{{ tg.id }}</span>
-        </q-card-section>
-        <q-card-section class="col-2 text-center self-center q-pa-xs">
-            <span v-if="location">
+    <q-card class="row q-ma-md justify-between shadow card">
+        <q-card-section
+            class="col-3 q-py-md q-pl-md q-pr-none flex column items-start justify-center">
+            <div class="align-center">#{{ tg.id }}</div>
+            <div v-if="location">
                 {{ roundToTwoDigits(distance(location, tg.location.coordinates))
                 }} km
-            </span>
-            <span v-else>
-                <q-spinner size="xs" />
-            </span>
+            </div>
+            <div v-else>
+                <q-spinner size="xs"></q-spinner>
+            </div>
         </q-card-section>
-        <q-card-section class="col-3 q-pa-sm self-center">
+
+        <q-card-section class="col-3 q-pa-none self-center">
             <div class="row justify-center">
                 <q-img v-if="!!tg.dipstation" class="col-3" src="dipstation.png"
                     width="32px" />
@@ -56,3 +56,11 @@ export default defineComponent({
     },
 })
 </script>
+
+<style scoped>
+.card {
+    min-height: 100px;
+    min-width: 314px;
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+}
+</style>
