@@ -6,7 +6,8 @@
         </div>
         <div>
             <TrainingGroundCard v-for="tg in trainingGrounds" :key="tg.id"
-                :tg="tg" />
+                :tg="tg" @add-to-favorites="addToFavorites"
+                @remove-from-favorites="removeFromFavorites" />
         </div>
     </q-page>
 </template>
@@ -26,15 +27,25 @@ const tgStore = useTrainingGroundsStore()
 export default defineComponent({
     name: "IndexPage",
     components: { TrainingGroundCard, TheFilters },
+    setup() {
+        tgStore.getTraingGrounds()
+        geolocationStore.getLocation();
+    },
     data() {
         return {
             currentPage: tgStore.pagination.pageNumber,
             showClosest: false,
         };
     },
-    setup() {
-        tgStore.getTraingGrounds()
-        geolocationStore.getLocation();
+    methods: {
+        async addToFavorites(tgId) {
+            await tgStore.addToFavorites(tgId);
+            await tgStore.getTraingGrounds();
+        },
+        async removeFromFavorites(tgId) {
+            await tgStore.removeFromFavorites(tgId);
+            await tgStore.getTraingGrounds();
+        },
     },
     computed: {
         trainingGrounds() {
@@ -93,6 +104,5 @@ export default defineComponent({
             }
         },
     },
-    methods: {},
 });
 </script>

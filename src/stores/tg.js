@@ -50,5 +50,13 @@ export const useTrainingGroundsStore = defineStore("tg", {
                 });
             return res;
         },
+        async addToFavorites(id) {
+            const url = `/api/training-ground/${id}/favorites/add/`;
+            const response = await api.post(url);
+        },
+        async removeFromFavorites(id) {
+            const url = `/api/training-ground/${id}/favorites/remove/`;
+            const response = await api.post(url);
+        },
     },
 });
