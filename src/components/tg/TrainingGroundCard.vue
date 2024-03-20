@@ -27,7 +27,7 @@
             <q-icon v-else name="fa-regular fa-star" size="md" color="yellow"
                 class="cursor-pointer q-mx-sm" @click="addToFavorites" />
             <q-icon name="fa-solid fa-map-location" size="md" color="primary"
-                class="cursor-pointer q-mx-sm" />
+                class="cursor-pointer q-mx-sm" @click="handleMapsLink" />
             <q-icon name="fa-solid fa-circle-play" size="md" color="primary"
                 class="cursor-pointer q-mx-sm" />
         </q-card-actions>
@@ -36,7 +36,7 @@
 
 <script>
 import { defineComponent } from 'vue';
-import { distance, roundToTwoDigits } from 'src/utils/coordinates';
+import { distance, roundToTwoDigits, createLinkToGoogleMaps } from 'src/utils/coordinates';
 import { useGeolocationStore } from 'src/stores/geolocation';
 
 const geolocationStore = useGeolocationStore();
@@ -58,6 +58,14 @@ export default defineComponent({
         removeFromFavorites() {
             this.$emit('remove-from-favorites', this.tg.id);
         },
+        handleMapsLink() {
+            if (!this.location) {
+                console.log('No location');
+                return
+            }
+            const link = createLinkToGoogleMaps(this.tg.location, this.location);
+            window.open(link, '_blank');
+        }
     },
     computed: {
         location() {
