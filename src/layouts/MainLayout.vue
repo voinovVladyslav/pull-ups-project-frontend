@@ -30,7 +30,7 @@
                             <q-item-section avatar>
                                 <q-icon name="search"></q-icon>
                             </q-item-section>
-                            <q-item-section> Discover </q-item-section>
+                            <q-item-section> Training Grounds </q-item-section>
                         </q-item>
                         <q-separator></q-separator>
                     </div>
