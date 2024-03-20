@@ -1,10 +1,12 @@
 <template>
-    <q-page>
-        <div class="row justify-center">
-            <div>
-                <TrainingGroundCard v-for="tg in trainingGrounds" :key="tg.id"
-                    :tg="tg" />
-            </div>
+    <q-page class="row justify-center">
+        <div class="flex items-center"
+            style="min-width: 100%; max-height: 100px;">
+            <TheFilters />
+        </div>
+        <div>
+            <TrainingGroundCard v-for="tg in trainingGrounds" :key="tg.id"
+                :tg="tg" />
         </div>
     </q-page>
 </template>
@@ -15,6 +17,7 @@ import { useGeolocationStore } from "src/stores/geolocation";
 import { useAuthStore } from "src/stores/auth";
 import { useTrainingGroundsStore } from "src/stores/tg";
 import TrainingGroundCard from "src/components/tg/TrainingGroundCard.vue";
+import TheFilters from "src/components/tg/TheFilters.vue";
 
 const geolocationStore = useGeolocationStore();
 const authStore = useAuthStore();
@@ -22,7 +25,7 @@ const tgStore = useTrainingGroundsStore()
 
 export default defineComponent({
     name: "IndexPage",
-    components: { TrainingGroundCard },
+    components: { TrainingGroundCard, TheFilters },
     data() {
         return {
             currentPage: tgStore.pagination.pageNumber,
