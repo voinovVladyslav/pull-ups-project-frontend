@@ -22,9 +22,10 @@
         </q-card-section>
         <q-card-actions class="col-6 flex justify-center q-pa-none">
             <q-icon v-if="tg.is_favorite" name="fa-solid fa-star" size="md"
-                color="yellow" class="cursor-pointer q-mx-sm" />
+                color="yellow" class="cursor-pointer q-mx-sm"
+                @click="removeFromFavorites" />
             <q-icon v-else name="fa-regular fa-star" size="md" color="yellow"
-                class="cursor-pointer q-mx-sm" />
+                class="cursor-pointer q-mx-sm" @click="addToFavorites" />
             <q-icon name="fa-solid fa-map-location" size="md" color="primary"
                 class="cursor-pointer q-mx-sm" />
             <q-icon name="fa-solid fa-circle-play" size="md" color="primary"
@@ -43,11 +44,20 @@ const geolocationStore = useGeolocationStore();
 export default defineComponent({
     name: 'TrainingGroundCard',
     props: ['tg'],
+    emits: ['add-to-favorites', 'remove-from-favorites'],
     setup() {
         return {
             distance,
             roundToTwoDigits,
         };
+    },
+    methods: {
+        addToFavorites() {
+            this.$emit('add-to-favorites', this.tg.id);
+        },
+        removeFromFavorites() {
+            this.$emit('remove-from-favorites', this.tg.id);
+        },
     },
     computed: {
         location() {
