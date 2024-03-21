@@ -49,6 +49,15 @@ const routes = [
                 },
             },
             {
+                path: "/add-training-ground",
+                component: () => import("pages/AddTrainingGroundPage.vue"),
+                meta: {
+                    authOnly: false,
+                    adminOnly: true,
+                    unauthenticatedOnly: false,
+                },
+            },
+            {
                 path: "/workout/:id/",
                 component: () => import("pages/WorkoutPage.vue"),
                 meta: {
