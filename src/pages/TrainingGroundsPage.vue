@@ -4,10 +4,14 @@
             style="min-width: 100%; max-height: 100px;">
             <TheFilters />
         </div>
-        <div>
+        <div style="min-width: 100%;">
             <TrainingGroundCard v-for="tg in trainingGrounds" :key="tg.id"
                 :tg="tg" @add-to-favorites="addToFavorites"
                 @remove-from-favorites="removeFromFavorites" />
+        </div>
+        <div class="q-mb-md">
+            <q-btn label="Load More" color="primary" :loading="loadingMore"
+                @click="loadMore" :class="{ 'hidden': !moreAvailable }" />
         </div>
     </q-page>
 </template>
@@ -33,8 +37,7 @@ export default defineComponent({
     },
     data() {
         return {
-            currentPage: tgStore.pagination.pageNumber,
-            showClosest: false,
+            loadingMore: false,
         };
     },
     methods: {
@@ -46,6 +49,11 @@ export default defineComponent({
             await tgStore.removeFromFavorites(tgId);
             await tgStore.getTraingGrounds();
         },
+        async loadMore() {
+            this.loadingMore = true;
+            await tgStore.loadMoreTrainingGrounds();
+            this.loadingMore = false;
+        }
     },
     computed: {
         trainingGrounds() {
@@ -54,25 +62,15 @@ export default defineComponent({
         location() {
             return geolocationStore.location;
         },
-        pageNumber() {
-            return tgStore.pagination.pageNumber;
-        },
-        pageSize() {
-            return tgStore.pagination.pageSize;
-        },
         totalPages() {
             return tgStore.totalPages;
         },
-        pagination() {
-            return {
-                page: this.pageNumber,
-                rowsPerPage: this.pageSize,
-            };
+        moreAvailable() {
+            return tgStore.moreAvailable;
         },
         isAuthenticated() {
             return authStore.isAuthenticated;
         },
-
         isAdmin() {
             return authStore.isStaff;
         },
@@ -82,27 +80,12 @@ export default defineComponent({
             tgStore.pagination.pageNumber = newValue;
             tgStore.getTraingGrounds()
         },
-        showClosest(newValue) {
-            if (!this.location) {
-                this.showClosest = false;
-                return;
-            }
-            if (newValue) {
-                const refPoint = {
-                    longitude: this.location.longitude,
-                    latitude: this.location.latitude,
-                };
-                tgStore.filters.referencePoint = refPoint;
-                tgStore.pagination.pageNumber = 1;
-                this.currentPage = 1;
-                tgStore.getTraingGrounds()
-            } else {
-                tgStore.filters.referencePoint = null;
-                tgStore.pagination.pageNumber = 1;
-                this.currentPage = 1;
-                tgStore.trainingGrounds()
-            }
-        },
     },
 });
 </script>
+
+<style scoped>
+.hidden {
+    display: none;
+}
+</style>

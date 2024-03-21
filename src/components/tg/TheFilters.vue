@@ -37,10 +37,12 @@ export default defineComponent({
             } else {
                 tgStore.filters.referencePoint = null;
             }
+            tgStore.pagination.pageNumber = 1;
             tgStore.getTraingGrounds();
         },
         favoritesOnly(newValue) {
             tgStore.filters.favorites_only = newValue;
+            tgStore.pagination.pageNumber = 1;
             tgStore.getTraingGrounds();
         },
     }
