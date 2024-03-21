@@ -17,6 +17,16 @@
                     :text-color="show === 'dip' ? 'white' : 'black'" />
             </q-btn-group>
         </div>
+        <div class="q-pa-md row">
+            <q-input class="col-8" type="number" v-model="reps" outlined
+                placeholder="Number of repetitions" />
+            <div class="col"></div>
+            <q-btn class="col-3" label="Save" color="primary"
+                @click="handleSave" :disable="!reps" />
+        </div>
+        <div>
+            <h6 class="text-center q-mb-none q-mt-md">History</h6>
+        </div>
         <div class="q-pa-md">
             <div v-if="show === 'pullup'">
                 <PullUpCounterCard v-for="counter in pullupCounters"
@@ -47,6 +57,7 @@ import { useTrainingGroundsStore } from 'src/stores/tg';
 import { useCounterStore } from 'src/stores/counter';
 import PullUpCounterCard from 'src/components/counter/PullUpCounterCard.vue';
 import DipStationCounterCard from 'src/components/counter/DipStationCounterCard.vue';
+import { notifyDanger } from 'src/utils/notify';
 
 const tgStore = useTrainingGroundsStore();
 const counterStore = useCounterStore();
@@ -89,6 +100,7 @@ export default defineComponent({
     },
     data() {
         return {
+            reps: null,
             pullup: {
                 loadingMore: false,
             },
@@ -107,6 +119,28 @@ export default defineComponent({
             this.dip.loadingMore = true;
             counterStore.loadMoreDipCounters();
             this.dip.loadingMore = false;
+        },
+        async handleSave() {
+            const payload = {
+                reps: this.reps,
+            };
+            if (this.show === 'pullup') {
+                const pullupRes = await counterStore.savePullUpCounter(payload);
+                if (pullupRes) {
+                    await counterStore.getPullUpCounters();
+                } else {
+                    notifyDanger('Faled to save pull up result')
+                }
+            }
+            if (this.show === 'dip') {
+                const dipRes = await counterStore.saveDipCounter(payload);
+                if (dipRes) {
+                    await counterStore.getDipCounters();
+                } else {
+                    notifyDanger('Faled to save dip result')
+                }
+            }
+            this.reps = null;
         }
     },
     computed: {
