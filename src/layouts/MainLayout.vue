@@ -63,6 +63,17 @@
                         </q-item>
                         <q-separator></q-separator>
                     </div>
+                    <div v-if="isAdmin">
+                        <q-item :active="false" clickable v-ripple
+                            to="/add-training-ground">
+                            <q-item-section avatar>
+                                <q-icon name="add"> </q-icon>
+                            </q-item-section>
+                            <q-item-section> Add Training Ground
+                            </q-item-section>
+                        </q-item>
+                        <q-separator></q-separator>
+                    </div>
                 </q-list>
             </q-scroll-area>
         </q-drawer>
