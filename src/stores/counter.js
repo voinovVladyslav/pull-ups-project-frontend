@@ -39,12 +39,12 @@ export const useCounterStore = defineStore("counter", {
         },
     },
     actions: {
-        getPullUpCounters() {
+        async getPullUpCounters() {
             if (!this.pullup.id) {
                 throw new Error("Pullup id is required");
             }
             const url = `/api/pullupbars/${this.pullup.id}/counter/${this.pullupQueryString}`;
-            const res = api
+            const res = await api
                 .get(url)
                 .then((response) => {
                     this.pullup.counters = response.data.results;
@@ -55,7 +55,7 @@ export const useCounterStore = defineStore("counter", {
                 });
             return res;
         },
-        loadMorePullUpCounters() {
+        async loadMorePullUpCounters() {
             if (!this.pullup.id) {
                 throw new Error("Pullup id is required");
             }
@@ -64,7 +64,7 @@ export const useCounterStore = defineStore("counter", {
             }
             this.pullup.pageNumber++;
             const url = `/api/pullupbars/${this.pullup.id}/counter/${this.pullupQueryString}`;
-            const res = api
+            const res = await api
                 .get(url)
                 .then((response) => {
                     this.pullup.counters = this.pullup.counters.concat(
@@ -77,12 +77,25 @@ export const useCounterStore = defineStore("counter", {
                 });
             return res;
         },
-        getDipCounters() {
+        async savePullUpCounter(payload) {
+            const url = `/api/pullupbars/${this.pullup.id}/counter/`;
+            const res = await api
+                .post(url, payload)
+                .then((response) => {
+                    return true;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return false;
+                });
+            return res;
+        },
+        async getDipCounters() {
             if (!this.dip.id) {
                 throw new Error("Dip id is required");
             }
             const url = `/api/dipstations/${this.dip.id}/counter/${this.dipQueryString}`;
-            const res = api
+            const res = await api
                 .get(url)
                 .then((response) => {
                     this.dip.counters = response.data.results;
@@ -92,7 +105,7 @@ export const useCounterStore = defineStore("counter", {
                     console.log(error);
                 });
         },
-        loadMoreDipCounters() {
+        async loadMoreDipCounters() {
             if (!this.dip.id) {
                 throw new Error("Dip id is required");
             }
@@ -101,7 +114,7 @@ export const useCounterStore = defineStore("counter", {
             }
             this.dip.pageNumber++;
             const url = `/api/dipstations/${this.dip.id}/counter/${this.dipQueryString}`;
-            const res = api
+            const res = await api
                 .get(url)
                 .then((response) => {
                     this.dip.counters = this.dip.counters.concat(
@@ -111,6 +124,19 @@ export const useCounterStore = defineStore("counter", {
                 })
                 .catch((error) => {
                     console.log(error);
+                });
+            return res;
+        },
+        async saveDipCounter(payload) {
+            const url = `/api/dipstations/${this.dip.id}/counter/`;
+            const res = await api
+                .post(url, payload)
+                .then((response) => {
+                    return true;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return false;
                 });
             return res;
         },
