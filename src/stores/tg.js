@@ -5,6 +5,7 @@ import { notifyDanger, notifySuccess } from "src/utils/notify";
 export const useTrainingGroundsStore = defineStore("tg", {
     state: () => ({
         trainingGrounds: [],
+        trainingGround: null,
         pagination: {
             totalTG: 0,
             pageSize: 20,
@@ -40,7 +41,7 @@ export const useTrainingGroundsStore = defineStore("tg", {
         },
     },
     actions: {
-        async getTraingGrounds() {
+        async getTrainingGrounds() {
             const url = "/api/training-ground/" + this.queryString;
             const res = await api
                 .get(url)
@@ -75,6 +76,20 @@ export const useTrainingGroundsStore = defineStore("tg", {
                     return false;
                 });
             return res;
+        },
+        async getTrainingGround(id) {
+            const url = `/api/training-ground/${id}/`;
+            await api
+                .get(url)
+                .then((response) => {
+                    this.trainingGround = response.data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    if (error.response.status === 404) {
+                        notifyDanger("Training ground not found");
+                    }
+                });
         },
         async addToFavorites(id) {
             const url = `/api/training-ground/${id}/favorites/add/`;

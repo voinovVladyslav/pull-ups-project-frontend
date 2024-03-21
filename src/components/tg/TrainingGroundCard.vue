@@ -28,8 +28,8 @@
                 class="cursor-pointer q-mx-sm" @click="addToFavorites" />
             <q-icon name="fa-solid fa-map-location" size="md" color="primary"
                 class="cursor-pointer q-mx-sm" @click="handleMapsLink" />
-            <q-icon name="fa-solid fa-circle-play" size="md" color="primary"
-                class="cursor-pointer q-mx-sm" />
+            <q-icon @click="navigate" name="fa-solid fa-circle-play" size="md"
+                color="primary" class="cursor-pointer q-mx-sm" />
         </q-card-actions>
     </q-card>
 </template>
@@ -52,6 +52,10 @@ export default defineComponent({
         };
     },
     methods: {
+        navigate() {
+            const url = `/workout/${this.tg.id}`;
+            this.$router.push(url);
+        },
         addToFavorites() {
             this.$emit('add-to-favorites', this.tg.id);
         },

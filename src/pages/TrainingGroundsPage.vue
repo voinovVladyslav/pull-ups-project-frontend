@@ -32,7 +32,7 @@ export default defineComponent({
     name: "IndexPage",
     components: { TrainingGroundCard, TheFilters },
     setup() {
-        tgStore.getTraingGrounds()
+        tgStore.getTrainingGrounds()
         geolocationStore.getLocation();
     },
     data() {
@@ -43,11 +43,11 @@ export default defineComponent({
     methods: {
         async addToFavorites(tgId) {
             await tgStore.addToFavorites(tgId);
-            await tgStore.getTraingGrounds();
+            await tgStore.getTrainingGrounds();
         },
         async removeFromFavorites(tgId) {
             await tgStore.removeFromFavorites(tgId);
-            await tgStore.getTraingGrounds();
+            await tgStore.getTrainingGrounds();
         },
         async loadMore() {
             this.loadingMore = true;
@@ -78,7 +78,7 @@ export default defineComponent({
     watch: {
         currentPage(newValue) {
             tgStore.pagination.pageNumber = newValue;
-            tgStore.getTraingGrounds()
+            tgStore.getTrainingGrounds()
         },
     },
 });

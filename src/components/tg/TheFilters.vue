@@ -38,12 +38,12 @@ export default defineComponent({
                 tgStore.filters.referencePoint = null;
             }
             tgStore.pagination.pageNumber = 1;
-            tgStore.getTraingGrounds();
+            tgStore.getTrainingGrounds();
         },
         favoritesOnly(newValue) {
             tgStore.filters.favorites_only = newValue;
             tgStore.pagination.pageNumber = 1;
-            tgStore.getTraingGrounds();
+            tgStore.getTrainingGrounds();
         },
     }
 });
