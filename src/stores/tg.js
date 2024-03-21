@@ -31,7 +31,12 @@ export const useTrainingGroundsStore = defineStore("tg", {
             return qs;
         },
         totalPages() {
-            return Math.ceil(this.totalTG / this.pageSize);
+            return Math.ceil(
+                this.pagination.totalTG / this.pagination.pageSize
+            );
+        },
+        moreAvailable() {
+            return this.pagination.pageNumber < this.totalPages;
         },
     },
     actions: {
@@ -41,7 +46,28 @@ export const useTrainingGroundsStore = defineStore("tg", {
                 .get(url)
                 .then((response) => {
                     this.trainingGrounds = response.data.results;
-                    this.totalTG = response.data.count;
+                    this.pagination.totalTG = response.data.count;
+                    return true;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    return false;
+                });
+            return res;
+        },
+        async loadMoreTrainingGrounds() {
+            if (!this.moreAvailable) {
+                return;
+            }
+            this.pagination.pageNumber++;
+            const url = "/api/training-ground/" + this.queryString;
+            const res = await api
+                .get(url)
+                .then((response) => {
+                    this.trainingGrounds = this.trainingGrounds.concat(
+                        response.data.results
+                    );
+                    this.pagination.totalTG = response.data.count;
                     return true;
                 })
                 .catch((error) => {
