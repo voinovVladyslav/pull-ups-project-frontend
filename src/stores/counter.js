@@ -3,69 +3,66 @@ import { api } from "src/boot/axios";
 
 export const useCounterStore = defineStore("counter", {
     state: () => ({
-        bar_id: null,
-        counters: [],
-        totalCounters: 0,
-        pageSize: 10,
-        pageNumber: 1,
-        next: null,
-        prev: null,
+        pullup: {
+            id: null,
+            counters: [],
+            totalCounters: 0,
+            pageSize: 20,
+            pageNumber: 1,
+        },
+        dip: {
+            id: null,
+            counters: [],
+            totalCounters: 0,
+            pageSize: 20,
+            pageNumber: 1,
+        },
     }),
     getters: {
-        totalPages() {
-            return Math.ceil(this.totalCounters / this.pageSize);
+        pullupTotalPages() {
+            return Math.ceil(this.pullup.totalCounters / this.pullup.pageSize);
         },
-        baseURL() {
-            return `/api/bars/${this.bar_id}/counter/`;
+        pullupQueryString() {
+            return `?page=${this.pullup.pageNumber}&page_size=${this.pullup.pageSize}`;
         },
-        queryString() {
-            let qs = `?page=${this.pageNumber}&page_size=${this.pageSize}`;
-            return qs;
+        dipTotalPages() {
+            return Math.ceil(this.dip.totalCounters / this.dip.pageSize);
+        },
+        dipQueryString() {
+            return `?page=${this.dip.pageNumber}&page_size=${this.dip.pageSize}`;
         },
     },
     actions: {
-        async getCounters() {
-            if (!this.bar_id) {
-                return;
+        getPullUpCounters() {
+            if (!this.pullup.id) {
+                throw new Error("Pullup id is required");
             }
-            const url = this.baseURL + this.queryString;
-            const response = api
+            const url = `/api/pullupbars/${this.pullup.id}/counter/`;
+            const res = api
                 .get(url)
                 .then((response) => {
-                    this.counters = response.data.results;
-                    this.totalCounters = response.data.count;
-                    this.next = !!response.data.next;
-                    this.prev = !!response.data.previous;
-                    return true;
-                })
-                .catch((error) => {
-                    return false;
-                });
-            return response;
-        },
-        async addCounter(payload) {
-            const response = api
-                .post(this.baseURL, payload)
-                .then((response) => {
-                    return true;
+                    this.pullup.counters = response.data.results;
+                    this.pullup.totalCounters = response.data.count;
                 })
                 .catch((error) => {
                     console.log(error);
-                    return false;
                 });
-            return response;
+            return res;
         },
-        async deleteCounter(id) {
-            const url = this.baseURL + `${id}/`;
-            const response = api
-                .delete(url)
+        getDipStationCounters() {
+            if (!this.dip.id) {
+                throw new Error("Dip id is required");
+            }
+            const url = `/api/dipstations/${this.dip.id}/counter/`;
+            const res = api
+                .get(url)
                 .then((response) => {
-                    return true;
+                    this.dip.counters = response.data.results;
+                    this.dip.totalCounters = response.data.count;
                 })
                 .catch((error) => {
-                    return false;
+                    console.log(error);
                 });
-            return response;
         },
     },
 });
