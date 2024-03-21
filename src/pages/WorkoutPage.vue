@@ -17,14 +17,25 @@
                     :text-color="show === 'dip' ? 'white' : 'black'" />
             </q-btn-group>
         </div>
-        <div>
+        <div class="q-pa-md">
             <div v-if="show === 'pullup'">
-                <PullUpCounterCard />
-                Pull Up:{{ pullupCounters.length }}
+                <PullUpCounterCard v-for="counter in pullupCounters"
+                    :key="counter.id" :counter="counter" />
+                <div class="q-mb-md">
+                    <q-btn label="Load More" color="primary"
+                        :loading="pullup.loadingMore"
+                        @click="loadMorePullupCounters"
+                        :class="{ 'hidden': !morePullupCountersAvailable }" />
+                </div>
             </div>
             <div v-if="show === 'dip'">
-                Dip : {{ dipCounters.length }}
-                <DipStationCounterCard />
+                <DipStationCounterCard v-for="counter in dipCounters"
+                    :key="counter.id" :counter="counter" />
+                <div class="q-mb-md">
+                    <q-btn label="Load More" color="primary"
+                        :loading="dip.loadingMore" @click="loadMoreDipCounters"
+                        :class="{ 'hidden': !moreDipCountersAvailable }" />
+                </div>
             </div>
         </div>
     </q-page>
@@ -65,7 +76,7 @@ export default defineComponent({
             }
             if (tgStore.trainingGround.dipstation) {
                 counterStore.dip.id = tgStore.trainingGround.dipstation;
-                counterStore.getDipStationCounters();
+                counterStore.getDipCounters();
                 if (show.value === null) {
                     show.value = 'dip';
                 }
@@ -77,7 +88,26 @@ export default defineComponent({
         };
     },
     data() {
-        return {};
+        return {
+            pullup: {
+                loadingMore: false,
+            },
+            dip: {
+                loadingMore: false,
+            }
+        };
+    },
+    methods: {
+        loadMorePullupCounters() {
+            this.pullup.loadingMore = true;
+            counterStore.loadMorePullUpCounters();
+            this.pullup.loadingMore = false;
+        },
+        loadMoreDipCounters() {
+            this.dip.loadingMore = true;
+            counterStore.loadMoreDipCounters();
+            this.dip.loadingMore = false;
+        }
     },
     computed: {
         id() {
@@ -89,9 +119,21 @@ export default defineComponent({
         pullupCounters() {
             return counterStore.pullup.counters;
         },
+        morePullupCountersAvailable() {
+            return counterStore.morePullupCountersAvailable;
+        },
         dipCounters() {
             return counterStore.dip.counters;
-        }
+        },
+        moreDipCountersAvailable() {
+            return counterStore.moreDipCountersAvailable;
+        },
     }
 });
 </script>
+
+<style scoped>
+.hidden {
+    display: none;
+}
+</style>
