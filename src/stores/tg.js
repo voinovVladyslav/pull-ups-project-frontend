@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
+import { notifyDanger, notifySuccess } from "src/utils/notify";
 
 export const useTrainingGroundsStore = defineStore("tg", {
     state: () => ({
         trainingGrounds: [],
-        trainingGround: null,
         pagination: {
             totalTG: 0,
             pageSize: 20,
@@ -78,11 +78,26 @@ export const useTrainingGroundsStore = defineStore("tg", {
         },
         async addToFavorites(id) {
             const url = `/api/training-ground/${id}/favorites/add/`;
-            const response = await api.post(url);
+            await api.post(url);
         },
         async removeFromFavorites(id) {
             const url = `/api/training-ground/${id}/favorites/remove/`;
-            const response = await api.post(url);
+            await api.post(url);
+        },
+        async addTrainingGround(data) {
+            const url = "/api/training-ground/";
+            const res = await api
+                .post(url, data)
+                .then((response) => {
+                    notifySuccess("Training ground added successfully");
+                    return true;
+                })
+                .catch((error) => {
+                    console.log(error);
+                    notifyDanger("Failed to add training ground");
+                    return false;
+                });
+            return res;
         },
     },
 });
