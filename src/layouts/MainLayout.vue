@@ -132,8 +132,10 @@ export default {
             if (!authStore.isAuthenticated) {
                 await authStore.getProfileData();
             }
+            if (authStore.isAuthenticated) {
+                notificationsStore.getUnreadNotifications()
+            }
         }
-        notificationsStore.getUnreadNotifications()
         authenticateUser();
     },
     data() {
