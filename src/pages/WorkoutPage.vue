@@ -34,8 +34,8 @@
         </div>
         <div class="q-px-md">
             <div v-if="show === 'pullup'">
-                <PullUpCounterCard v-for="counter in pullupCounters"
-                    :key="counter.id" :counter="counter" />
+                <CounterCard v-for="counter in pullupCounters" :key="counter.id"
+                    :counter="counter" @delete="handleDeletePullUpCounter" />
                 <div class="q-mb-md">
                     <q-btn label="Load More" color="primary"
                         :loading="pullup.loadingMore"
@@ -44,8 +44,8 @@
                 </div>
             </div>
             <div v-if="show === 'dip'">
-                <DipStationCounterCard v-for="counter in dipCounters"
-                    :key="counter.id" :counter="counter" />
+                <CounterCard v-for="counter in dipCounters" :key="counter.id"
+                    :counter="counter" @delete="handleDeleteDipCounter" />
                 <div class="q-mb-md">
                     <q-btn label="Load More" color="primary"
                         :loading="dip.loadingMore" @click="loadMoreDipCounters"
@@ -60,8 +60,7 @@ import { defineComponent, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useTrainingGroundsStore } from 'src/stores/tg';
 import { useCounterStore } from 'src/stores/counter';
-import PullUpCounterCard from 'src/components/counter/PullUpCounterCard.vue';
-import DipStationCounterCard from 'src/components/counter/DipStationCounterCard.vue';
+import CounterCard from 'src/components/counter/CounterCard.vue';
 import { notifyDanger } from 'src/utils/notify';
 
 const tgStore = useTrainingGroundsStore();
@@ -70,8 +69,7 @@ const counterStore = useCounterStore();
 export default defineComponent({
     name: 'WorkoutPage',
     components: {
-        PullUpCounterCard,
-        DipStationCounterCard
+        CounterCard,
     },
     setup() {
         const route = useRoute();
@@ -132,6 +130,7 @@ export default defineComponent({
             if (this.show === 'pullup') {
                 const pullupRes = await counterStore.savePullUpCounter(payload);
                 if (pullupRes) {
+                    counterStore.pullup.pageNumber = 1;
                     await counterStore.getPullUpCounters();
                 } else {
                     notifyDanger('Faled to save pull up result')
@@ -140,12 +139,29 @@ export default defineComponent({
             if (this.show === 'dip') {
                 const dipRes = await counterStore.saveDipCounter(payload);
                 if (dipRes) {
+                    counterStore.dip.pageNumber = 1;
                     await counterStore.getDipCounters();
                 } else {
                     notifyDanger('Faled to save dip result')
                 }
             }
             this.reps = null;
+        },
+        async handleDeletePullUpCounter(id) {
+            const res = await counterStore.deletePullUpCounter(id);
+            if (res) {
+                await counterStore.getPullUpCounters();
+            } else {
+                notifyDanger('Failed to delete pull up result');
+            }
+        },
+        async handleDeleteDipCounter(id) {
+            const res = await counterStore.deleteDipCounter(id);
+            if (res) {
+                await counterStore.getDipCounters();
+            } else {
+                notifyDanger('Failed to delete dip result');
+            }
         }
     },
     computed: {

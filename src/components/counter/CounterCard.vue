@@ -9,7 +9,7 @@
         </q-card-section>
         <q-card-section class="self-center q-py-none">
             <q-icon name="fa-solid fa-trash-can" class="cursor-pointer"
-                color="negative" size="sm" />
+                color="negative" size="sm" @click="handleDelete" />
         </q-card-section>
     </q-card>
 </template>
@@ -19,7 +19,8 @@ import { defineComponent } from 'vue';
 import { renderDate, renderTime } from 'src/utils/datetime'
 
 export default defineComponent({
-    name: 'DipStationCounterCard',
+    name: 'CounterCard',
+    emits: ['delete'],
     props: {
         counter: {
             type: Object,
@@ -30,7 +31,12 @@ export default defineComponent({
         return {
             renderDate,
             renderTime,
-        };
+        }
+    },
+    methods: {
+        handleDelete() {
+            this.$emit('delete', this.counter.id);
+        }
     }
 });
 </script>
