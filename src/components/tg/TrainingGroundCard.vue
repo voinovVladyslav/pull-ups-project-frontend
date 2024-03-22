@@ -21,11 +21,14 @@
             </div>
         </q-card-section>
         <q-card-actions class="col-6 flex justify-center q-pa-none">
-            <q-icon v-if="tg.is_favorite" name="fa-solid fa-star" size="md"
-                color="yellow" class="cursor-pointer q-mx-sm"
-                @click="removeFromFavorites" />
-            <q-icon v-else name="fa-regular fa-star" size="md" color="yellow"
-                class="cursor-pointer q-mx-sm" @click="addToFavorites" />
+            <div v-if="isAuthenticated">
+                <q-icon v-if="tg.is_favorite" name="fa-solid fa-star" size="md"
+                    color="yellow" class="cursor-pointer q-mx-sm"
+                    @click="removeFromFavorites" />
+                <q-icon v-else name="fa-regular fa-star" size="md"
+                    color="yellow" class="cursor-pointer q-mx-sm"
+                    @click="addToFavorites" />
+            </div>
             <q-icon name="fa-solid fa-map-location" size="md" color="primary"
                 class="cursor-pointer q-mx-sm" @click="handleMapsLink" />
             <q-icon @click="navigate" name="fa-solid fa-circle-play" size="md"
@@ -38,8 +41,10 @@
 import { defineComponent } from 'vue';
 import { distance, roundToTwoDigits, createLinkToGoogleMaps } from 'src/utils/coordinates';
 import { useGeolocationStore } from 'src/stores/geolocation';
+import { useAuthStore } from 'src/stores/auth';
 
 const geolocationStore = useGeolocationStore();
+const authStore = useAuthStore();
 
 export default defineComponent({
     name: 'TrainingGroundCard',
@@ -74,6 +79,9 @@ export default defineComponent({
     computed: {
         location() {
             return geolocationStore.location;
+        },
+        isAuthenticated() {
+            return authStore.isAuthenticated;
         },
     },
 })
