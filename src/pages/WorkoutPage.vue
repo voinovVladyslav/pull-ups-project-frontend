@@ -26,8 +26,13 @@
         </div>
         <div>
             <h6 class="text-center q-mb-none q-mt-md">History</h6>
+            <div class="q-px-lg q-mt-sm flex display-center justify-between">
+                <div>Reps</div>
+                <div class="q-ml-sm">Date</div>
+                <div>Delete</div>
+            </div>
         </div>
-        <div class="q-pa-md">
+        <div class="q-px-md">
             <div v-if="show === 'pullup'">
                 <PullUpCounterCard v-for="counter in pullupCounters"
                     :key="counter.id" :counter="counter" />
