@@ -90,6 +90,14 @@ export const useCounterStore = defineStore("counter", {
                 });
             return res;
         },
+        async deletePullUpCounter(id) {
+            const url = `/api/pullupbars/${this.pullup.id}/counter/${id}/`;
+            const res = await api.delete(url);
+            if (res.status === 204) {
+                return true;
+            }
+            return false;
+        },
         async getDipCounters() {
             if (!this.dip.id) {
                 throw new Error("Dip id is required");
@@ -139,6 +147,14 @@ export const useCounterStore = defineStore("counter", {
                     return false;
                 });
             return res;
+        },
+        async deleteDipCounter(id) {
+            const url = `/api/dipstations/${this.dip.id}/counter/${id}/`;
+            const res = await api.delete(url);
+            if (res.status === 204) {
+                return true;
+            }
+            return false;
         },
     },
 });
