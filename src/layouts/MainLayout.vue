@@ -9,7 +9,7 @@
                         <q-item clickable :active="false" v-ripple
                             to="/profile">
                             <q-item-section avatar>
-                                <q-icon name="person"></q-icon>
+                                <q-icon name="person" size="md"></q-icon>
                             </q-item-section>
                             <q-item-section> Profile </q-item-section>
                         </q-item>
@@ -19,7 +19,7 @@
                         <q-item clickable :active="false" v-ripple
                             @click="notificationDrawerOpen = !notificationDrawerOpen">
                             <q-item-section avatar>
-                                <q-icon name="notifications"></q-icon>
+                                <q-icon name="notifications" size="md"></q-icon>
                             </q-item-section>
                             <q-item-section> Notifications </q-item-section>
                         </q-item>
@@ -28,7 +28,7 @@
                     <div>
                         <q-item :active="false" clickable v-ripple to="/">
                             <q-item-section avatar>
-                                <q-icon name="search"></q-icon>
+                                <q-icon name="search" size="md"></q-icon>
                             </q-item-section>
                             <q-item-section> Training Grounds </q-item-section>
                         </q-item>
@@ -38,7 +38,7 @@
                         <q-item clickable :active="false" v-ripple
                             to="/registration">
                             <q-item-section avatar>
-                                <q-icon name="person"></q-icon>
+                                <q-icon name="person" size="md"></q-icon>
                             </q-item-section>
                             <q-item-section> Registration</q-item-section>
                         </q-item>
@@ -47,7 +47,7 @@
                     <div v-if="!isAuthenticated">
                         <q-item clickable :active="false" v-ripple to="/login">
                             <q-item-section avatar>
-                                <q-icon name="login"></q-icon>
+                                <q-icon name="login" size="md"></q-icon>
                             </q-item-section>
                             <q-item-section> Login </q-item-section>
                         </q-item>
@@ -57,7 +57,7 @@
                         <q-item :active="false" clickable v-ripple
                             to="/achievements">
                             <q-item-section avatar>
-                                <q-icon name="emoji_events"> </q-icon>
+                                <q-icon name="emoji_events" size="md"> </q-icon>
                             </q-item-section>
                             <q-item-section> Achievements </q-item-section>
                         </q-item>
@@ -67,9 +67,20 @@
                         <q-item :active="false" clickable v-ripple
                             to="/add-training-ground">
                             <q-item-section avatar>
-                                <q-icon name="add"> </q-icon>
+                                <q-icon name="add" size="md"> </q-icon>
                             </q-item-section>
                             <q-item-section> Add Training Ground
+                            </q-item-section>
+                        </q-item>
+                        <q-separator></q-separator>
+                    </div>
+                    <div v-if="isAuthenticated">
+                        <q-item :active="false" clickable v-ripple to="/charts">
+                            <q-item-section avatar>
+                                <q-icon name="fa-solid fa-chart-line" size="sm">
+                                </q-icon>
+                            </q-item-section>
+                            <q-item-section> Charts
                             </q-item-section>
                         </q-item>
                         <q-separator></q-separator>

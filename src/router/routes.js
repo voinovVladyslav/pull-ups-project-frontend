@@ -66,6 +66,15 @@ const routes = [
                     unauthenticatedOnly: false,
                 },
             },
+            {
+                path: "/charts",
+                component: () => import("pages/ChartsPage.vue"),
+                meta: {
+                    authOnly: true,
+                    adminOnly: false,
+                    unauthenticatedOnly: false,
+                },
+            },
         ],
         meta: {
             authOnly: false,
