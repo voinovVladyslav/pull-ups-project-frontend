@@ -14,4 +14,12 @@ function renderTime(dateString) {
     return date.toLocaleTimeString();
 }
 
-export { renderDate, renderTime };
+function renderDateTime(dateString) {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+        return "Invalid Date";
+    }
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+}
+
+export { renderDate, renderTime, renderDateTime };

@@ -1,27 +1,45 @@
 <template>
     <q-page class="q-pa-md">
-        <h1>Charts</h1>
-        <apexchart type="line" height="350" :options="chartOptions"
-            :series="series"></apexchart>
+        <h4>Pullups</h4>
+        <apexchart v-if="!loading" type="line" height="350"
+            :options="chartOptions" :series="pullupsSeries"></apexchart>
+        <q-spinner v-else />
+        <h4>Dips</h4>
+        <apexchart v-if="!loading" type="line" height="350"
+            :options="chartOptions" :series="dipsSeries"></apexchart>
+        <q-spinner v-else />
     </q-page>
 </template>
 
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import VueApexCharts from 'vue3-apexcharts'
+import { useChartsStore } from 'src/stores/charts';
+import { renderDateTime } from 'src/utils/datetime';
+
+const chartsStore = useChartsStore();
 
 export default defineComponent({
     name: "ChartsPage",
     components: {
         apexchart: VueApexCharts,
     },
+    setup() {
+        const loading = ref(false);
+        async function loadData() {
+            loading.value = true;
+            await chartsStore.getDips();
+            await chartsStore.getPullups();
+            loading.value = false;
+        }
+        loadData();
+        return {
+            loading,
+        }
+    },
     data() {
         return {
-            series: [{
-                name: "Pull Ups",
-                data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
-            }],
             chartOptions: {
                 chart: {
                     height: 350,
@@ -36,10 +54,6 @@ export default defineComponent({
                 stroke: {
                     curve: 'straight'
                 },
-                title: {
-                    text: 'Product Trends by Month',
-                    align: 'left'
-                },
                 grid: {
                     row: {
                         colors: ['#f3f3f3', 'transparent'],
@@ -49,9 +63,33 @@ export default defineComponent({
             },
 
         }
-
-
     },
+    computed: {
+        dipsSeries() {
+            return [{
+                name: "Dips",
+                data: chartsStore.dips.map(dip => {
+                    return {
+                        x: renderDateTime(dip.created_at),
+                        y: dip.reps
+                    }
+                }).reverse()
+            }];
+        },
+        pullupsSeries() {
+            return [{
+                name: "Pull Ups",
+                data: chartsStore.pullups.map(
+                    pullup => {
+                        return {
+                            x: renderDateTime(pullup.created_at),
+                            y: pullup.reps
+                        }
+                    }
+                ).reverse()
+            }];
+        }
+    }
 })
 
 </script>
