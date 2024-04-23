@@ -1,26 +1,30 @@
 <template>
-    <div>
-        <h5 class="text-center q-pa-none q-mt-md q-mb-none">Add Training Ground
-        </h5>
-    </div>
-    <div class="flex column q-pa-md">
-        <q-toggle size="xl" v-model="create_pullupbar"
-            label="With Pull Up Bar" />
-        <q-toggle size="xl" v-model="create_dipstation"
-            label="With Dip Station" />
-    </div>
-    <div class="flex q-px-md justify-around">
-        <q-input type="number" step="0.0001" min="-90" max="90" outlined
-            placeholder="Latitude" class="coordinates" v-model="latitude" />
-        <q-input type="number" min="-180" max="180" outlined
-            placeholder="Longitude" class="coordinates" v-model="longitude" />
-    </div>
-    <div class="flex q-pa-md justify-around">
-        <q-btn label="Fill Location" color="primary" :disable="!location"
-            @click="fillCurrentLocation" class="button" />
-        <q-btn label="Save" color="primary" class="button"
-            :disable="!validation" @click="addTrainingGround" />
-    </div>
+    <q-page class="default-page-container">
+        <div>
+            <h5 class="text-center q-pa-none q-mt-md q-mb-none">Add Training
+                Ground
+            </h5>
+        </div>
+        <div class="flex column q-pa-md">
+            <q-toggle size="xl" v-model="create_pullupbar"
+                label="With Pull Up Bar" />
+            <q-toggle size="xl" v-model="create_dipstation"
+                label="With Dip Station" />
+        </div>
+        <div class="flex q-px-md justify-around">
+            <q-input type="number" step="0.0001" min="-90" max="90" outlined
+                placeholder="Latitude" class="coordinates" v-model="latitude" />
+            <q-input type="number" min="-180" max="180" outlined
+                placeholder="Longitude" class="coordinates"
+                v-model="longitude" />
+        </div>
+        <div class="flex q-pa-md justify-around">
+            <q-btn label="Fill Location" color="primary" :disable="!location"
+                @click="fillCurrentLocation" class="button" />
+            <q-btn label="Save" color="primary" class="button"
+                :disable="!validation" @click="addTrainingGround" />
+        </div>
+    </q-page>
 </template>
 
 <script>

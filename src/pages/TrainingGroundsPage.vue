@@ -1,5 +1,5 @@
 <template>
-    <q-page class="row justify-center">
+    <q-page class="row justify-center default-page-container">
         <div class="flex items-center q-pa-md"
             style="min-width: 100%; max-height: 100px;">
             <TheFilters />

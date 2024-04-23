@@ -1,5 +1,5 @@
 <template>
-    <q-page class="">
+    <q-page class="default-page-container">
         <div class="q-pa-md row">
             <h4 class="col-12 q-mt-xs text-center">Profile</h4>
             <div class="col-12 q-mb-md" v-if="!editForm">
@@ -9,8 +9,8 @@
                 <q-btn class="col-5" label="Edit Profile" color="primary"
                     @click="openEditForm"></q-btn>
 
-                <q-btn class="col-5" label="Logout" color="negative" type="button"
-                    @click="logout">
+                <q-btn class="col-5" label="Logout" color="negative"
+                    type="button" @click="logout">
                 </q-btn>
             </div>
             <div v-else class="col-12 row">

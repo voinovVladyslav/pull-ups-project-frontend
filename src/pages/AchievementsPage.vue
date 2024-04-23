@@ -1,7 +1,8 @@
 <template>
-    <q-page class="q-pa-md row items-start q-gutter-md justify-center">
-        <AchievementCard v-for="achievement in achievements" :key="achievement.id"
-            :achievement="achievement">
+    <q-page
+        class="q-pa-md row items-start q-gutter-md justify-center default-page-container">
+        <AchievementCard v-for="achievement in achievements"
+            :key="achievement.id" :achievement="achievement">
         </AchievementCard>
     </q-page>
 </template>

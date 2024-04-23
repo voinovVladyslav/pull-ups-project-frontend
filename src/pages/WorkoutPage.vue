@@ -1,5 +1,5 @@
 <template>
-    <q-page class="q-pa-md">
+    <q-page class="q-pa-md default-page-container">
         <div class="flex justify-center align-center q-my-md">
             <h5 class="text-center q-my-none">Training Ground #{{ id }}</h5>
             <q-icon v-if="tg?.is_favorite" class="q-ml-sm"
